@@ -1,0 +1,22 @@
+{
+  "name": "transform-js-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "@babel/core": "^7.8.7"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.1.6",
+    "@types/jest": "^25.1.4",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  }
+}

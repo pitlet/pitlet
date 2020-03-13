@@ -1,0 +1,31 @@
+{
+  "name": "preset-vue",
+  "version": "0.0.0-dev",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.0.0-alpha.8"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  }
+}
