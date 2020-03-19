@@ -1,0 +1,23 @@
+{
+  "name": "transform-coffee",
+  "version": "1.0.0-dev",
+  "description": "",
+  "main": "dist/transform.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "@types/node": "^13.7.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "coffeescript": "^2.5.1"
+  }
+}

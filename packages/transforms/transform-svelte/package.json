@@ -1,0 +1,17 @@
+{
+  "name": "transform-svelte",
+  "version": "1.0.0-dev",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "svelte": "^3.20.1"
+  }
+}

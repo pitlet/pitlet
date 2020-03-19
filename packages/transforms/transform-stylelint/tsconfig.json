@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "types": ["jest"],
+    "outDir": "dist"
+  },
+  "include": ["src", "jest.config.js"]
+}

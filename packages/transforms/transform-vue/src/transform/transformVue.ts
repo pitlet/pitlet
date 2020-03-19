@@ -1,22 +1,8 @@
-import {
-  TransformApi,
-  Transform,
-  ChildAssetActual,
-  ChildAssetVirtual,
-  TransformedAsset,
-} from '../types'
 import { parse } from '@vue/compiler-sfc'
 
-interface Api {
-  readonly getFileName: TransformApi['getFileName']
-}
+const getFileName = asset => 'index.vue'
 
-interface Options {}
-
-export const transformVue: Transform<Api, Options> = (
-  api,
-  options,
-) => async asset => {
+export const transformVue = (api, options) => async asset => {
   const { descriptor, errors } = parse(asset.content, {
     sourceMap: true,
     filename: asset.id,
@@ -24,7 +10,7 @@ export const transformVue: Transform<Api, Options> = (
   if (errors.length) {
     throw new Error(errors[0].message)
   }
-  const fileName = api.getFileName(asset)
+  const fileName = getFileName(asset)
   const importMapActual: { [key: string]: ChildAssetActual } = Object.create(
     null,
   )
@@ -44,14 +30,18 @@ export const transformVue: Transform<Api, Options> = (
     if (block.src) {
       importMapActual[templateRequest] = {
         protocol: 'filesystem',
-        type: blockType,
-        importee: block.src,
+        meta: {
+          type: blockType,
+          importee: block.src,
+        },
       }
     } else {
       importMapVirtual[templateRequest] = {
         protocol: 'virtual',
-        type: blockType,
-        content: block.content,
+        meta: {
+          type: blockType,
+          content: block.content,
+        },
       }
     }
   }
@@ -109,10 +99,14 @@ export const transformVue: Transform<Api, Options> = (
   ].join('\n')
   code += `\n\nexport default script`
   const transformed: TransformedAsset = {
-    id: asset.id,
-    content: code,
-    importMapActual,
-    importMapVirtual,
+    protocol: 'virtual',
+    meta: {
+      content: code,
+      importMap,
+      // directDependencies
+      // importMapActual,
+      // importMapVirtual,
+    },
   }
   return transformed
 }

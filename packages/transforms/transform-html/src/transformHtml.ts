@@ -53,18 +53,16 @@ export const transformHtml = (api, options) => async asset => {
           ) {
             childAssets.push({
               protocol: 'http',
-              type: getImageType(node.attrs.src),
-              importee: node.attrs.src,
               meta: {
+                importee: node.attrs.src,
                 node,
               },
             })
           } else {
             childAssets.push({
               protocol: 'filesystem',
-              type: getScriptType(node.attrs.src),
-              importee: node.attrs.src,
               meta: {
+                importee: node.attrs.src,
                 node,
               },
             })
@@ -77,18 +75,16 @@ export const transformHtml = (api, options) => async asset => {
           ) {
             childAssets.push({
               protocol: 'http',
-              type: getImageType(node.attrs.src),
-              importee: node.attrs.src,
               meta: {
+                importee: node.attrs.src,
                 node,
               },
             })
           } else {
             childAssets.push({
               protocol: 'filesystem',
-              type: getImageType(node.attrs.src),
-              importee: node.attrs.src,
               meta: {
+                importee: node.attrs.src,
                 node,
               },
             })
@@ -107,18 +103,18 @@ export const transformHtml = (api, options) => async asset => {
           ) {
             childAssets.push({
               protocol: 'http',
-              type: getLinkStyleSheetType(node.attrs.href),
-              importee: node.attrs.href,
               meta: {
+                type: 'html-link',
+                importee: node.attrs.href,
                 node,
               },
             })
           } else {
+            // TODO assert that it is a stylesheet
             childAssets.push({
               protocol: 'filesystem',
-              type: getLinkStyleSheetType(node.attrs.href),
-              importee: node.attrs.href,
               meta: {
+                importee: node.attrs.href,
                 node,
               },
             })

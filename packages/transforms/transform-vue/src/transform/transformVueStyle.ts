@@ -1,27 +1,27 @@
 import { compileStyleAsync } from '@vue/compiler-sfc'
-import { Asset, Transform } from '../types'
 
-interface Api {}
+// interface Api {}
 
-interface Options {}
+// interface Options {}
 
-export const transformVueStyle: Transform<Api, Options> = (
-  api,
-  options,
-) => async asset => {
+export const transformVueStyle = (api, options) => async asset => {
+  const { content, vueSourceMap, ...otherMeta } = asset.meta
   const { code, map, errors } = await compileStyleAsync({
-    source: asset.content,
+    source: content,
     filename: 'index.vue',
     id: 'data-v-123',
     scoped: true,
+    // preprocessLang: 'sass',
   })
   if (errors.length) {
     throw errors[0]
   }
-  const transformed: VirtualAsset = {
+  const transformed = {
     protocol: 'virtual',
-    content: code,
-    id: asset.id,
+    meta: {
+      content: code,
+      ...otherMeta,
+    },
   }
   return transformed
 }

@@ -3,6 +3,10 @@ export interface Asset {
   readonly content: string
 }
 
+export interface EntryAsset {
+  readonly type: string
+}
+
 interface ChildAssetAbstract {
   /**
    * The type of the asset.

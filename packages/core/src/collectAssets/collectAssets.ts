@@ -1,21 +1,14 @@
 import { Transform } from '../types'
 
 export const collectAssets: ({
-  resolve,
+  bundler,
   transform,
-  entryAbsolutePath,
-  getContent,
+  entry,
 }: {
-  resolve: any
-  transform: Transform
-  entryAbsolutePath: string
-  getContent: (absolutePath: string) => Promise<string>
-}) => Promise<any> = async ({
-  resolve,
-  transform,
-  entryAbsolutePath,
-  getContent,
-}) => {
+  bundler
+  transform
+  entry
+}) => Promise<any> = async ({ bundler, transform, entry }) => {
   const finalAssets = []
   const seen = new Set<string>()
   const collect = async (absolutePath: string) => {
@@ -23,19 +16,19 @@ export const collectAssets: ({
       return
     }
     seen.add(absolutePath)
-    const content = await getContent(absolutePath)
-    const transformed = await transform({
+    const content = await bundler.getContent(absolutePath)
+    const transformed = await bundler.transform({
       absolutePath,
       content,
     })
     if (transformed.childAssets) {
       for (const dependency of transformed.directDependencies) {
-        const resolved = await resolve(dependency, absolutePath)
+        const resolved = await bundler.resolve(dependency, absolutePath)
         await collect(resolved)
       }
     } else {
       for (const dependency of transformed.directDependencies) {
-        const resolved = await resolve(dependency, absolutePath)
+        const resolved = await bundler.resolve(dependency, absolutePath)
         await collect(resolved)
       }
     }
@@ -45,7 +38,7 @@ export const collectAssets: ({
 
     if (transformed.importMapVirtual) {
       for (const assetVirtual of Object.values(transformed.importMapVirtual)) {
-        const transformedAssetVirtual = await transform(assetVirtual)
+        const transformedAssetVirtual = await bundler.transform(assetVirtual)
         seen.add(assetVirtual.absolutePath)
         finalAssets.push(transformedAssetVirtual)
       }

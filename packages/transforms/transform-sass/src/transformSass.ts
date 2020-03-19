@@ -10,8 +10,9 @@ interface Options {
   readonly indentedSyntax?: boolean
 }
 
-export const transformSass: Transform<Api, Options> = ((api,
+export const transformSass = ((api,
 { indentedSyntax = false }) = async asset => {
+  const { content, ...otherMeta } = asset.meta
   const { error, result } = await new Promise<{
     error: sass.SassException
     result: sass.Result
@@ -19,7 +20,7 @@ export const transformSass: Transform<Api, Options> = ((api,
     sass.render(
       {
         file: 'index.scss',
-        data: asset.content,
+        data: content,
         indentedSyntax,
       },
       (error, result) => {
@@ -30,5 +31,11 @@ export const transformSass: Transform<Api, Options> = ((api,
   if (error) {
     throw new Error(error.message)
   }
-  const transformed: TransformedAsset = {}
+  const transformed: Asset = {
+    protocol: 'virtual',
+    meta: {
+      content: result.css,
+      ...otherMeta,
+    },
+  }
 })
