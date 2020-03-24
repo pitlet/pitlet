@@ -1,8 +1,6 @@
 import { transformVueStyle } from './transformVueStyle'
 
 test('transform vue style', async () => {
-  const api = {}
-  const options = {}
   const asset = {
     protocol: 'virtual',
     meta: {
@@ -11,7 +9,7 @@ test('transform vue style', async () => {
 }`,
     },
   }
-  const transformed = await transformVueStyle(api, options)(asset)
+  const transformed = await transformVueStyle(asset)
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {

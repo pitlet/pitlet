@@ -4,7 +4,7 @@ interface Api {}
 
 interface Options {}
 
-export const transformVueTemplate = (api, options) => async asset => {
+export const transformVueTemplate = async asset => {
   const { content, ...otherMeta } = asset.meta
   const { code, errors } = compileTemplate({
     source: content,

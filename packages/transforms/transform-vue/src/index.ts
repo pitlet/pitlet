@@ -1,5 +1,5 @@
 export * from './transform/transformVue'
-export * from './transform/transformVueScript'
+// export * from './transform/transformVueScript'
 export * from './transform/transformVueStyle'
 export * from './transform/transformVueTemplate'
 export * from './transform/transformVuePostTransformBlock'

@@ -1,8 +1,6 @@
 import { transformVueTemplate } from './transformVueTemplate'
 
 test('transform vue template', async () => {
-  const api = {}
-  const options = {}
   const asset = {
     protocol: 'virtual',
     meta: {
@@ -11,7 +9,7 @@ test('transform vue template', async () => {
     `,
     },
   }
-  const transformed = await transformVueTemplate(api, options)(asset)
+  const transformed = await transformVueTemplate(asset)
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {

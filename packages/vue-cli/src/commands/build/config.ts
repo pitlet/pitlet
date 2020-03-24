@@ -1,4 +1,4 @@
-import { transformVue } from 'transform-vue'
+import { transformVue, transformVueTemplate } from 'transform-vue'
 import { transformJsModule } from 'transform-js-module'
 
 const transformFunctionMap = {
@@ -9,3 +9,5 @@ const transformFunctionMap = {
   js: [transformJsModule],
   css: [],
 }
+
+console.log(1 + 1)

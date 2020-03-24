@@ -1,8 +1,6 @@
-import { transformVueScript } from './transformVueScript'
+import { transformVuePostTransformBlock } from './transformVuePostTransformBlock'
 
-test('transform vue script', async () => {
-  const api = {}
-  const options = {}
+test('postTransformBlock', async () => {
   const asset = {
     meta: {
       content: 'console.log(1 /* ONE */ + 1 /* ONE */);',
@@ -34,7 +32,7 @@ console.log(NUMBERS.ONE + NUMBERS.ONE);
       vueBlockOffset: 6,
     },
   }
-  const transformed = await transformVueScript(api, options)(asset)
+  const transformed = await transformVuePostTransformBlock(asset)
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {

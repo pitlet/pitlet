@@ -2,21 +2,20 @@ import { parse } from '@vue/compiler-sfc'
 
 const getFileName = asset => 'index.vue'
 
-export const transformVue = (api, options) => async asset => {
-  const { descriptor, errors } = parse(asset.content, {
+export const transformVue = async asset => {
+  // console.log(asset)
+  const { content, ...otherMeta } = asset.meta
+  const { descriptor, errors } = parse(content, {
     sourceMap: true,
-    filename: asset.id,
+    filename: asset.meta.id,
   })
   if (errors.length) {
     throw new Error(errors[0].message)
   }
   const fileName = getFileName(asset)
-  const importMapActual: { [key: string]: ChildAssetActual } = Object.create(
-    null,
-  )
-  const importMapVirtual: { [key: string]: ChildAssetVirtual } = Object.create(
-    null,
-  )
+  const directDependencies = []
+  const importMapActual: { [key: string]: any } = Object.create(null)
+  const importMapVirtual: { [key: string]: any } = Object.create(null)
   let templateImport = `const render = () => {}`
   let templateRequest
   if (descriptor.template) {
@@ -26,23 +25,22 @@ export const transformVue = (api, options) => async asset => {
     templateRequest = `./${fileName}${queryString}`
     templateImport = `import { render } from '${templateRequest}'`
     const blockType = `vue-${blockLang}`
-    const blockId = `${asset.id}${queryString}`
     if (block.src) {
-      importMapActual[templateRequest] = {
+      directDependencies.push({
         protocol: 'filesystem',
         meta: {
           type: blockType,
           importee: block.src,
         },
-      }
+      })
     } else {
-      importMapVirtual[templateRequest] = {
+      directDependencies.push({
         protocol: 'virtual',
         meta: {
           type: blockType,
           content: block.content,
         },
-      }
+      })
     }
   }
   let scriptImport = `const script = {}`
@@ -53,19 +51,22 @@ export const transformVue = (api, options) => async asset => {
     const scriptRequest = `./${fileName}${queryString}`
     scriptImport = `import script from '${scriptRequest}'\n`
     const blockType = `vue-${blockLang}`
-    const blockId = `${asset.id}${queryString}`
     if (block.src) {
-      importMapActual[scriptRequest] = {
-        type: blockType,
-        id: blockId,
-        importee: block.src,
-      }
+      directDependencies.push({
+        protocol: 'filesystem',
+        meta: {
+          type: blockType,
+          importee: block.src,
+        },
+      })
     } else {
-      importMapVirtual[scriptRequest] = {
-        type: blockType,
-        id: blockId,
-        content: block.content,
-      }
+      directDependencies.push({
+        protocol: 'virtual',
+        meta: {
+          type: blockType,
+          content: block.content,
+        },
+      })
     }
   }
   let stylesCode = ``
@@ -76,19 +77,22 @@ export const transformVue = (api, options) => async asset => {
     const styleRequest = `./${fileName}${queryString}`
     stylesCode += `\nimport '${styleRequest}'`
     const blockType = `vue-${blockLang}`
-    const blockId = `${asset.id}${queryString}`
     if (block.src) {
-      importMapActual[styleRequest] = {
-        type: blockType,
-        id: blockId,
-        importee: block.src,
-      }
+      directDependencies.push({
+        protocol: 'filesystem',
+        meta: {
+          type: blockType,
+          importee: block.src,
+        },
+      })
     } else {
-      importMapVirtual[styleRequest] = {
-        type: blockType,
-        id: blockId,
-        content: block.content,
-      }
+      directDependencies.push({
+        protocol: 'virtual',
+        meta: {
+          type: blockType,
+          content: block.content,
+        },
+      })
     }
   }
   let code = [
@@ -98,14 +102,12 @@ export const transformVue = (api, options) => async asset => {
     'script.render = render',
   ].join('\n')
   code += `\n\nexport default script`
-  const transformed: TransformedAsset = {
+  const transformed = {
     protocol: 'virtual',
     meta: {
       content: code,
-      importMap,
-      // directDependencies
-      // importMapActual,
-      // importMapVirtual,
+      directDependencies,
+      ...otherMeta,
     },
   }
   return transformed

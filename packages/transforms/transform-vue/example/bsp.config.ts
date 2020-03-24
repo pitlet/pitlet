@@ -1,19 +1,18 @@
+import * as path from 'path'
 import {
-  transformVueScript,
-  transformVueStyle,
-  transformVueTemplate,
-  transformVue,
-  transformVuePostTransformBlock,
-} from '../src/index'
-import {
-  nodeBundler,
   collectAssets,
   createTransform,
+  nodeBundler,
 } from '../../../core/src/index'
-import * as path from 'path'
+import { transformJsModule } from '../../transform-js-module'
+import {
+  transformVue,
+  transformVuePostTransformBlock,
+  transformVueStyle,
+  transformVueTemplate,
+} from '../src/index'
 
-const transformCss = (api, options) => async asset => asset
-const transformJsModule = (api, options) => async asset => asset
+const transformCss = async asset => asset
 
 const transformFunctionMap = {
   vue: [transformVue, transformJsModule],
@@ -24,16 +23,16 @@ const transformFunctionMap = {
   css: [transformCss],
 }
 
+const typeMap = {
+  vue: 'vue',
+  js: 'js',
+}
 ;(async () => {
   const assets = await collectAssets({
     bundler: nodeBundler,
     transform: createTransform({ transformFunctionMap }),
-    entry: {
-      protocol: 'filesystem',
-      meta: {
-        absolutePath: path.join(__dirname, 'src/index.js'),
-      },
-    },
+    entry: path.join(__dirname, 'src/index.js'),
   })
   console.log(assets)
+  assets //?
 })()

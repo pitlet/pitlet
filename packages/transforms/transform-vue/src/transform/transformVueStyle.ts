@@ -4,7 +4,7 @@ import { compileStyleAsync } from '@vue/compiler-sfc'
 
 // interface Options {}
 
-export const transformVueStyle = (api, options) => async asset => {
+export const transformVueStyle = async asset => {
   const { content, vueSourceMap, ...otherMeta } = asset.meta
   const { code, map, errors } = await compileStyleAsync({
     source: content,

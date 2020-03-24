@@ -1,14 +1,11 @@
 {
-  "name": "transform-js-dev",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "transform-js-module",
+  "version": "0.0.0-dev",
+  "main": "dist/transformJsModule.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -b",
+    "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "peerDependencies": {
     "@babel/core": "^7.8.7"
   },
@@ -18,5 +15,8 @@
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.9.0"
   }
 }

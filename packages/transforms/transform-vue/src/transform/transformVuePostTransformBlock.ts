@@ -14,9 +14,15 @@ const OFFSET_CHAR_MAP = [
   'Y',
 ]
 
-const REVERSE_OFFSET_MAP = Object.fromEntries(
-  OFFSET_CHAR_MAP.map((value, index) => [value, index]),
-)
+// TODO this is better but there is a bug with quokka atm
+// const REVERSE_OFFSET_MAP = Object.fromEntries(
+//   OFFSET_CHAR_MAP.map((value, index) => [value, index]),
+// )
+
+const REVERSE_OFFSET_MAP = Object.create(null)
+for (let i = 0; i < OFFSET_CHAR_MAP.length; i++) {
+  REVERSE_OFFSET_MAP[OFFSET_CHAR_MAP[i]] = i
+}
 
 const getCharOffset = (char: string) => {
   if (!(char in REVERSE_OFFSET_MAP)) {
@@ -36,7 +42,7 @@ const getOffsetString = (offset: number) => {
 /**
  * Fixes the sourcemap for blocks
  */
-export const transformVuePostTransformBlock = (api, options) => async asset => {
+export const transformVuePostTransformBlock = async asset => {
   let {
     content,
     sourceMap,

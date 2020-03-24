@@ -18,7 +18,7 @@
   "dependencies": {
     "commander": "^4.1.1",
     "fs-extra": "^8.1.0",
-    "transform-vue": "file:../transforms/transform-vue",
-    "transform-js-module": "file:../transforms/transform-js-module"
+    "transform-vue": "0.0.0-dev",
+    "transform-js-module": "0.0.0-dev"
   }
 }
