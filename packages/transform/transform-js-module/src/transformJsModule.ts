@@ -7,7 +7,13 @@ const getDirectDependencies = (ast: babel.types.File) => {
     t.isImportDeclaration(node),
   ) as babel.types.ImportDeclaration[]
   const relativePaths = imports.map(node => node.source.value)
-  return relativePaths
+  const dependencyAssets = relativePaths.map(relativePath => ({
+    protocol: 'filesystem',
+    meta: {
+      importee: relativePath,
+    },
+  }))
+  return dependencyAssets
 }
 
 const BABEL_TRANSFORM_OPTIONS: babel.TransformOptions = {
@@ -31,29 +37,41 @@ const transform = async (
   ast: babel.types.File,
   code: string,
 ) => {
-  const { code: transformedCode } = (await babel.transformFromAstAsync(
-    ast,
-    code,
-    {
-      ...BABEL_TRANSFORM_OPTIONS,
-      filename: absolutePath,
-    },
-  )) as babel.BabelFileResult
+  const {
+    code: transformedCode,
+    map: transformedSourceMap,
+  } = (await babel.transformFromAstAsync(ast, code, {
+    ...BABEL_TRANSFORM_OPTIONS,
+    filename: absolutePath,
+    sourceMaps: true,
+  })) as babel.BabelFileResult
   return {
     transformedCode,
+    transformedSourceMap,
   }
 }
 
 export const transformJsModule = async asset => {
-  const { content, ...otherMeta } = asset.meta
+  const {
+    content,
+    type,
+    directDependencies,
+    sourceMap,
+    ...otherMeta
+  } = asset.meta
   const ast = (await babel.parseAsync(content)) as babel.types.File
-  const directDependencies = getDirectDependencies(ast)
-  const { transformedCode } = await transform(asset.absolutePath, ast, content)
+  const { transformedCode, transformedSourceMap } = await transform(
+    asset.absolutePath,
+    ast,
+    content,
+  )
   const transformed = {
     protocol: 'virtual',
     meta: {
       content: transformedCode,
-      directDependencies,
+      directDependencies: directDependencies || getDirectDependencies(ast),
+      sourceMap: transformedSourceMap,
+      type: 'js-module',
       ...otherMeta,
     },
   }

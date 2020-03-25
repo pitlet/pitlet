@@ -11,8 +11,23 @@ test('import from node_modules', async () => {
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {
+      type: 'js-module',
       content: `var _react = require("react");`,
-      directDependencies: ['react'],
+      sourceMap: {
+        version: 3,
+        mappings: 'AAAA',
+        names: [],
+        sources: ['unknown'],
+        sourcesContent: ["import React from 'react'"],
+      },
+      directDependencies: [
+        {
+          protocol: 'filesystem',
+          meta: {
+            importee: 'react',
+          },
+        },
+      ],
     },
   })
 })
@@ -28,8 +43,23 @@ test('relative import', async () => {
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {
+      type: 'js-module',
       content: `var _foo = require("./foo");`,
-      directDependencies: ['./foo'],
+      sourceMap: {
+        version: 3,
+        mappings: 'AAAA',
+        names: [],
+        sources: ['unknown'],
+        sourcesContent: ["import foo from './foo'"],
+      },
+      directDependencies: [
+        {
+          protocol: 'filesystem',
+          meta: {
+            importee: './foo',
+          },
+        },
+      ],
     },
   })
 })

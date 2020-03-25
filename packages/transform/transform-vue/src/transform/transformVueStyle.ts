@@ -5,7 +5,7 @@ import { compileStyleAsync } from '@vue/compiler-sfc'
 // interface Options {}
 
 export const transformVueStyle = async asset => {
-  const { content, vueSourceMap, ...otherMeta } = asset.meta
+  const { content, type, vueSourceMap, ...otherMeta } = asset.meta
   const { code, map, errors } = await compileStyleAsync({
     source: content,
     filename: 'index.vue',
@@ -20,6 +20,7 @@ export const transformVueStyle = async asset => {
     protocol: 'virtual',
     meta: {
       content: code,
+      type: 'css',
       ...otherMeta,
     },
   }

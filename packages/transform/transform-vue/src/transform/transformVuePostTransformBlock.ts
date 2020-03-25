@@ -39,19 +39,12 @@ const getOffsetString = (offset: number) => {
   return `AA${char}A`
 }
 
-/**
- * Fixes the sourcemap for blocks
- */
-export const transformVuePostTransformBlock = async asset => {
-  let {
-    content,
-    sourceMap,
-    vueOriginalSource,
-    vueOriginalSourceContent,
-    vueBlockOffset,
-    ...otherMeta
-  } = asset.meta
-  const transformedContent = content
+const getTransformedSourceMap = ({
+  sourceMap,
+  vueBlockOffset,
+  vueOriginalSource,
+  vueOriginalSourceContent,
+}) => {
   const offsetMatch = sourceMap.mappings.match(/AA(\w)A/)
   let originalMappings = sourceMap.mappings
   if (offsetMatch) {
@@ -69,10 +62,32 @@ export const transformVuePostTransformBlock = async asset => {
     sourcesContent: [vueOriginalSourceContent],
     mappings: offsetString + ',' + originalMappings,
   }
+  return transformedSourceMap
+}
+
+/**
+ * Fixes the sourcemap for blocks
+ */
+export const transformVuePostTransformBlock = async asset => {
+  let {
+    sourceMap,
+    vueBlockOffset,
+    vueOriginalSource,
+    vueOriginalSourceContent,
+    ...otherMeta
+  } = asset.meta
+  if (!sourceMap) {
+    return asset
+  }
+  const transformedSourceMap = getTransformedSourceMap({
+    sourceMap,
+    vueBlockOffset,
+    vueOriginalSource,
+    vueOriginalSourceContent,
+  })
   const transformed = {
     protocol: 'virtual',
     meta: {
-      content: transformedContent,
       sourceMap: transformedSourceMap,
       ...otherMeta,
     },

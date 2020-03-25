@@ -1,5 +1,6 @@
 const assertDefined = (value: any) => {
   if (!value) {
+    console.log(JSON.stringify(value))
     throw new Error('expected value to be defined')
   }
 }
@@ -7,10 +8,11 @@ const assertDefined = (value: any) => {
 interface Asset {
   readonly protocol: string
   readonly meta: {
-    readonly directDependencies?: readonly string[]
-    readonly resolvedDirectDependencies?: readonly string[]
+    readonly directDependencies?: readonly Asset[]
+    readonly resolvedDirectDependencies?: readonly Asset[]
     readonly id?: any
     readonly sourceMap?: any
+    readonly [key: string]: any
   }
 }
 
@@ -20,7 +22,7 @@ interface AssetFileSystem extends Asset {
 
 interface AssetVirtual extends Asset {
   readonly protocol: 'virtual'
-  readonly meta: Asset['meta'] & {
+  readonly meta: {
     readonly content: string
   }
 }
@@ -39,37 +41,60 @@ export const collectAssets: ({
 }) => Promise<any> = async ({ bundler, transform, entry }) => {
   const finalAssets = []
   const seen = new Set<string>()
-  const collect = async (id: any) => {
+  const collect = async (asset: any) => {
+    let virtualAsset
+    if (asset.protocol === 'filesystem') {
+      virtualAsset = {
+        protocol: 'virtual',
+        meta: {
+          content: await bundler.getContent(asset.meta.id),
+          ...asset.meta,
+        },
+      }
+    } else if (asset.protocol === 'virtual') {
+      virtualAsset = asset
+    } else {
+      throw new Error('invalid protocol')
+    }
     // const asset = {
     //   protocol: 'filesystem',
     //   meta: {
     //     id,
     //   },
     // }
-    const asset = {
-      protocol: 'virtual',
-      meta: {
-        id,
-        content: await bundler.getContent(id),
-      },
-    }
-    const transformed = await transform(asset)
-    console.log('before')
-    console.log(transformed)
-    console.log('done')
+
+    const transformed = await transform(virtualAsset)
     assertDefined(transformed)
     assertDefined(transformed.meta)
     assertDefined(transformed.meta.directDependencies)
     const resolvedDirectDependencies = await Promise.all(
-      transformed.meta.directDependencies.map(directDependency =>
-        bundler.resolve(directDependency, id),
-      ),
+      transformed.meta.directDependencies.map(async directDependency => {
+        switch (directDependency.protocol) {
+          case 'filesystem':
+            const { importee, ...otherMeta } = directDependency.meta
+            const resolved = await bundler.resolve(importee, asset.meta.id)
+            return {
+              protocol: 'filesystem',
+              meta: {
+                id: resolved,
+                ...otherMeta,
+              },
+            }
+          case 'virtual':
+            return directDependency
+          default:
+            throw new Error(
+              `invalid protocol ${JSON.stringify(directDependency)}`,
+            )
+        }
+      }),
     )
-    resolvedDirectDependencies //?
     for (const resolvedDirectDependency of resolvedDirectDependencies) {
       assertDefined(resolvedDirectDependency)
-      if (!seen.has(resolvedDirectDependency)) {
-        seen.add(resolvedDirectDependency)
+      assertDefined(resolvedDirectDependency.meta)
+      assertDefined(resolvedDirectDependency.meta.id)
+      if (!seen.has(resolvedDirectDependency.meta.id)) {
+        seen.add(resolvedDirectDependency.meta.id)
         await collect(resolvedDirectDependency)
       }
     }

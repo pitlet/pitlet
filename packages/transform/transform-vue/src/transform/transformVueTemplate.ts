@@ -5,7 +5,7 @@ interface Api {}
 interface Options {}
 
 export const transformVueTemplate = async asset => {
-  const { content, ...otherMeta } = asset.meta
+  const { content, type, ...otherMeta } = asset.meta
   const { code, errors } = compileTemplate({
     source: content,
     filename: 'index.vue',
@@ -17,6 +17,7 @@ export const transformVueTemplate = async asset => {
     protocol: 'virtual',
     meta: {
       content: code,
+      type: 'js',
       ...otherMeta,
     },
   }

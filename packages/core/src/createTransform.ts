@@ -27,7 +27,6 @@ const getType = asset => {
 
 export const createTransform = ({ transformFunctionMap }) => async asset => {
   const type = getType(asset)
-  console.log('whatever')
   if (!(type in transformFunctionMap)) {
     console.log(type)
     console.log(transformFunctionMap)

@@ -14,8 +14,6 @@ export const transformVue = async asset => {
   }
   const fileName = getFileName(asset)
   const directDependencies = []
-  const importMapActual: { [key: string]: any } = Object.create(null)
-  const importMapVirtual: { [key: string]: any } = Object.create(null)
   let templateImport = `const render = () => {}`
   let templateRequest
   if (descriptor.template) {
@@ -39,6 +37,8 @@ export const transformVue = async asset => {
         meta: {
           type: blockType,
           content: block.content,
+          importee: templateRequest,
+          id: `${asset.meta.id}${queryString}`,
         },
       })
     }
@@ -65,6 +65,8 @@ export const transformVue = async asset => {
         meta: {
           type: blockType,
           content: block.content,
+          importee: scriptRequest,
+          id: `${asset.meta.id}${queryString}`,
         },
       })
     }
@@ -91,6 +93,8 @@ export const transformVue = async asset => {
         meta: {
           type: blockType,
           content: block.content,
+          importee: styleRequest,
+          id: `${asset.meta.id}${queryString}`,
         },
       })
     }
