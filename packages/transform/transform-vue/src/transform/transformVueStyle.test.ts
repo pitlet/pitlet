@@ -13,6 +13,7 @@ test('transform vue style', async () => {
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {
+      type: 'css',
       content: `h1[data-v-123] {
   font-size: 24px;
 }`,

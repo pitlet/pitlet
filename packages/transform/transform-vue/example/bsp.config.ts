@@ -23,13 +23,27 @@ const transformFunctionMap = {
   js: [transformJsModule],
   css: [transformCss],
 }
-;(async () => {
-  const entry = {
-    protocol: 'filesystem',
-    meta: {
-      id: path.join(__dirname, 'src/index.js'),
-    },
+
+const entry = {
+  protocol: 'filesystem',
+  meta: {
+    id: path.join(__dirname, 'src/index.js'),
+  },
+}
+
+const alias = {
+  vue: path.join(__dirname, 'web_modules', 'vue.js'),
+}
+
+const originalResolve = nodeBundler.resolve
+
+nodeBundler.resolve = async (importee, importer) => {
+  if (importee === 'vue') {
+    return alias.vue
   }
+  return originalResolve(importee, importer)
+}
+;(async () => {
   const assets = await collectAssets({
     bundler: nodeBundler,
     transform: createTransform({ transformFunctionMap }),

@@ -32,17 +32,13 @@ const BABEL_TRANSFORM_OPTIONS: babel.TransformOptions = {
   ],
 }
 
-const transform = async (
-  absolutePath: string,
-  ast: babel.types.File,
-  code: string,
-) => {
+const transform = async (id: string, ast: babel.types.File, code: string) => {
   const {
     code: transformedCode,
     map: transformedSourceMap,
   } = (await babel.transformFromAstAsync(ast, code, {
     ...BABEL_TRANSFORM_OPTIONS,
-    filename: absolutePath,
+    filename: id,
     sourceMaps: true,
   })) as babel.BabelFileResult
   return {
@@ -61,7 +57,7 @@ export const transformJsModule = async asset => {
   } = asset.meta
   const ast = (await babel.parseAsync(content)) as babel.types.File
   const { transformedCode, transformedSourceMap } = await transform(
-    asset.absolutePath,
+    asset.meta.id,
     ast,
     content,
   )

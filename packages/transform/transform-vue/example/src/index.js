@@ -1,7 +1,4 @@
-// @ts-ignore
-// import App from './App.vue'
-// import { createApp } from 'vue'
+import App from './App.vue'
+import { createApp } from 'vue'
 
-// createApp(App).mount('#app')
-
-console.log('hello world')
+createApp(App).mount('#app')

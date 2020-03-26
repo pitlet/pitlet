@@ -13,6 +13,7 @@ test('transform vue template', async () => {
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {
+      type: 'js',
       content: `import { createVNode as _createVNode, openBlock as _openBlock, createBlock as _createBlock } from "vue"
 
 export function render(_ctx, _cache) {

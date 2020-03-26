@@ -109,6 +109,7 @@ export const transformVue = async asset => {
   const transformed = {
     protocol: 'virtual',
     meta: {
+      type: 'js',
       content: code,
       directDependencies,
       ...otherMeta,

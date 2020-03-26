@@ -28,6 +28,13 @@ import {require} from './moduleSystem.js'
 require(entry)
 `
 
+interface IndexSourceMap {
+  readonly version: 3
+  readonly file: string
+  readonly sections: any[]
+  readonly sourceRoot: string
+}
+
 export const packageJs = async (assets, workspaceFolder, entryId) => {
   let jsModulesCode = `export const modules = {\n`
   let lineOffset = 1
@@ -45,7 +52,7 @@ export const packageJs = async (assets, workspaceFolder, entryId) => {
     lineOffset += 1 // because of module start
 
     if (jsAsset.meta.sourceMap) {
-      sourceMap.sections!.push({
+      sourceMap.sections.push({
         offset: {
           line: lineOffset,
           column: 0,
