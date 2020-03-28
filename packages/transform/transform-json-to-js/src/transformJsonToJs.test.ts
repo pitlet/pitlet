@@ -1,4 +1,4 @@
-import { transformJsonInline } from './transformJsonInline'
+import { transformJsonToJs } from './transformJsonToJs'
 
 test('basic', async () => {
   const api = {}
@@ -9,7 +9,7 @@ test('basic', async () => {
       content: '{"hello":"world"}',
     },
   }
-  const transformed = await transformJsonInline(api, options)(asset)
+  const transformed = await transformJsonToJs(api, options)(asset)
   expect(transformed).toEqual({
     protocol: 'virtual',
     meta: {
@@ -28,7 +28,7 @@ test('invalid json', async () => {
       content: '{"hello":}',
     },
   }
-  const transformed = await transformJsonInline(api, options)(asset)
+  const transformed = await transformJsonToJs(api, options)(asset)
   expect(transformed).toEqual(undefined)
   // expect(mockEmitError).toHaveBeenCalledTimes(1)
   // expect(mockEmitError).toHaveBeenCalledWith(

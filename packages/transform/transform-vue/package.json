@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -b",
-    "dev-example": "nodemon --watch 'src/**/*.ts' --exec \"ts-node example/bsp.config.ts\"",
+    "example": "node example/bsp.config.js",
     "build-example": "ts-node example/bsp.config.ts"
   },
   "dependencies": {

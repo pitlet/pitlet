@@ -32,7 +32,15 @@ export const resolve = async (importee, importer) => {
 
 const getContent = async id => {
   assertDefined(id)
-  return fs.readFileSync(id).toString()
+  return new Promise<string>((resolve, reject) => {
+    fs.readFile(id, (error, data) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data.toString())
+      }
+    })
+  })
 }
 
 // export const write = async (outDir, packageOperations) => {}

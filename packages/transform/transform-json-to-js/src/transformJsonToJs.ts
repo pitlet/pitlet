@@ -1,6 +1,6 @@
 // TODO optimize if it's a number or a string (and don't include JSON.parse("42") for 42)
 
-export const transformJsonInline = (api, options) => async asset => {
+export const transformJsonToJs = (api, options) => async asset => {
   const { content, ...otherMeta } = asset.meta
   let parsed: any
   try {

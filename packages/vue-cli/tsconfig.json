@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "bin",
     "rootDir": "src",
-    "types": ["node"]
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src"]
 }

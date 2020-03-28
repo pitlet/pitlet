@@ -1,5 +1,5 @@
 {
-  "name": "bsp-transform-json-inline",
+  "name": "bsp-transform-json-to-js",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

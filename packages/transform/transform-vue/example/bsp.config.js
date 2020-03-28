@@ -1,19 +1,22 @@
-import * as fs from 'fs'
-import * as path from 'path'
-import {
+const fs = require('fs')
+const path = require('path')
+const {
   collectAssets,
   createTransform,
   nodeBundler,
-} from '../../../core/src/index'
-import { packageJs } from '../../../package/package-js/src/packageJs'
-import { transformCss } from '../../transform-css/src/transformCss'
-import { transformJsModule } from '../../transform-js-module/src/transformJsModule'
-import {
+} = require('../../../core/dist/index')
+const { packageJs } = require('../../../package/package-js/dist/packageJs')
+const { transformCss } = require('../../transform-css/dist/transformCss')
+const {
+  transformJsModule,
+} = require('../../transform-js-module/dist/transformJsModule')
+const {
   transformVue,
   transformVuePostTransformBlock,
   transformVueStyle,
   transformVueTemplate,
-} from '../src/index'
+} = require('../dist/index')
+const { measureStart, measureEnd } = require('./measure')
 
 const transformFunctionMap = {
   vue: [transformVue, transformJsModule],
@@ -44,15 +47,29 @@ nodeBundler.resolve = async (importee, importer) => {
   return originalResolve(importee, importer)
 }
 ;(async () => {
+  console.log(
+    process.memoryUsage().heapUsed / (1024 * 1024) + 'MB memory usage',
+  )
+  measureStart('collect assets')
   const assets = await collectAssets({
     bundler: nodeBundler,
     transform: createTransform({ transformFunctionMap }),
     entry,
   })
+  measureEnd('collect assets')
+  console.log(
+    process.memoryUsage().heapUsed / (1024 * 1024) + 'MB memory usage',
+  )
+  // console.log(JSON.stringify(assets, null, 2))
+  measureStart('package')
   const packaged = await packageJs(assets, '', entry.meta.id)
+  measureEnd('package')
+  measureStart('dist')
   if (!fs.existsSync(path.join(__dirname, 'dist'))) {
     fs.mkdirSync(path.join(__dirname, 'dist'))
   }
+  measureEnd('dist')
+  measureStart('write')
   for (const operation of packaged) {
     switch (operation.type) {
       case 'write':
@@ -65,10 +82,15 @@ nodeBundler.resolve = async (importee, importer) => {
         console.log('not supported')
     }
   }
+  measureEnd('write')
   // fs.writeFileSync(
   //   path.join(__dirname, 'out.json'),
   //   JSON.stringify(packaged, null, 2) + '\n',
   // )
   // console.log(assets)
   // assets //?
+
+  console.log(
+    process.memoryUsage().heapUsed / (1024 * 1024) + 'MB memory usage',
+  )
 })()
