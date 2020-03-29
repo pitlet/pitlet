@@ -1,7 +1,6 @@
-import { compile } from 'imba/lib/compiler'
+import { compile, Options } from 'imba/lib/compiler'
 
-const imbaOptions = {
-  ENV_WEBPACK: true,
+const imbaOptions: Options = {
   comments: false,
   target: 'web',
   sourceMap: true,
