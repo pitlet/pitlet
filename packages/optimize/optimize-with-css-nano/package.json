@@ -1,0 +1,19 @@
+{
+  "name": "optimize-with-css-nano",
+  "version": "1.0.0-dev",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/cssnano": "^4.0.0",
+    "@types/jest": "^25.1.4",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "cssnano": "^4.1.10",
+    "postcss": "^7.0.27"
+  }
+}
