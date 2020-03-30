@@ -23,6 +23,31 @@ export const require = id => {
 }
 `
 
+const JS_RUNTIME_HMR_CODE = `import {modules} from './modules.js'
+import {moduleCache, require} from './moduleSystem.js'
+import {entry} from './entry.js'
+const hmrApply = ({id, content, dependencyMap}) => {
+  const fn = (exports, require) => eval(content)
+  modules[id] = [fn, dependencyMap]
+}
+const webSocket = new WebSocket("ws://localhost:3000")
+webSocket.onmessage = ({data}) => {
+  const {command, payload} = JSON.parse(data)
+  for(const transformedAsset of payload.transformedAssets){
+    const {id, content} = transformedAsset.meta
+    const oldModule = modules[id]
+    if(!oldModule){
+      throw new Error(\`cannot find module "\${id}"\`)
+    }
+    const dependencyMap = oldModule[1]
+    hmrApply({id, content, dependencyMap})
+    delete moduleCache[id]
+  }
+  delete moduleCache[entry]
+  require(entry)
+}
+`
+
 const JS_RUNTIME_CODE = `import {entry} from './entry.js'
 import {require} from './moduleSystem.js'
 require(entry)
@@ -37,7 +62,7 @@ interface IndexSourceMap {
 
 export const packageJs = async (assets, workspaceFolder, entryId) => {
   let jsModulesCode = `export const modules = {\n`
-  let lineOffset = 1
+  let lineOffset = 2
   const sourceRoot = workspaceFolder
   const sourceMap = {
     version: 3,
@@ -119,6 +144,18 @@ ${jsAsset.meta.content!}
       type: 'write',
       destinationPath: 'runtime.js',
       content: JS_RUNTIME_CODE,
+    },
+    {
+      type: 'write',
+      destinationPath: 'runtimeHmr.js',
+      content: JS_RUNTIME_HMR_CODE,
+    },
+    {
+      type: 'write',
+      destinationPath: 'main.js',
+      content: ['runtime.js', 'runtimeHmr.js']
+        .map(runtime => `import './${runtime}'`)
+        .join('\n'),
     },
   ]
 }

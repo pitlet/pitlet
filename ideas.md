@@ -25,3 +25,13 @@ https://github.com/WebHotelier/webpack-fast-refresh
 
 unrelated:
 https://github.com/stephencookdev/speed-measure-webpack-plugin
+
+Useful links
+
+- https://www.google.com/search?client=ubuntu&hs=X2Y&channel=fs&sxsrf=ALeKk012gQj7cGSnudLyntOyfHMqQGyn9g%3A1585559145695&ei=abaBXr6HKsq6kgWUso7oBQ&q=fast+development&oq=fast+deve&gs_lcp=CgZwc3ktYWIQAxgBMgIIADICCAAyAggAMgIIADICCAAyAggAMgIIADICCAAyAggAMgIIADoECAAQRzoFCAAQkQI6BAgAEEM6BAgjECc6BwgAEBQQhwJQgIV8WPOSfGDtp3xoAHAEeACAAckBiAHBB5IBBTYuMi4xmAEAoAEBqgEHZ3dzLXdpeg&sclient=psy-ab
+
+Related Projects:
+
+- https://github.com/jlongster/monkey-hot-loader/issues/4
+- https://github.com/milankinen/livereactload/issues/50
+-
