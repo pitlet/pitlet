@@ -1,14 +1,11 @@
 {
   "name": "@pitlet/transform-js-module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/transformJsModule.js",
   "scripts": {
     "build": "tsc -b",
     "test": "jest",
     "release": "npm publish --access public"
-  },
-  "peerDependencies": {
-    "@babel/core": "^7.8.7"
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.6",
@@ -18,6 +15,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.9.0"
+    "@babel/plugin-transform-modules-commonjs": "^7.9.0",
+    "@babel/core": "^7.8.7"
   }
 }
