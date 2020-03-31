@@ -1,5 +1,5 @@
 {
-  "name": "transform-preact",
+  "name": "@pitlet/transform-preact",
   "version": "0.0.0-dev",
   "main": "dist/transformPreact.js",
   "scripts": {

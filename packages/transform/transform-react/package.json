@@ -1,5 +1,5 @@
 {
-  "name": "transform-react",
+  "name": "@pitlet/transform-react",
   "version": "0.0.0-dev",
   "main": "dist/transformReact.js",
   "scripts": {

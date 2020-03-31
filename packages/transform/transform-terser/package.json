@@ -1,5 +1,5 @@
 {
-  "name": "transform-terser",
+  "name": "@pitlet/transform-terser",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

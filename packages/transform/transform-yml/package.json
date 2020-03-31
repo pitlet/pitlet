@@ -1,5 +1,5 @@
 {
-  "name": "transform-yml",
+  "name": "@pitlet/transform-yml",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

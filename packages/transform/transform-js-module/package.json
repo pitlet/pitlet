@@ -1,5 +1,5 @@
 {
-  "name": "transform-js-module",
+  "name": "@pitlet/transform-js-module",
   "version": "0.0.0-dev",
   "main": "dist/transformJsModule.js",
   "scripts": {

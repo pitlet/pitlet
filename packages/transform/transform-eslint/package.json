@@ -1,5 +1,5 @@
 {
-  "name": "transform-eslint",
+  "name": "@pitlet/transform-eslint",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

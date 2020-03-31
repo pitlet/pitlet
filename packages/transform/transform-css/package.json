@@ -1,5 +1,5 @@
 {
-  "name": "transform-css",
+  "name": "@pitlet/transform-css",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

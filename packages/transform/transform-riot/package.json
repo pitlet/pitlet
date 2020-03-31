@@ -1,5 +1,5 @@
 {
-  "name": "bsp-transform-riot",
+  "name": "@pitlet/transform-riot",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

@@ -1,5 +1,5 @@
 {
-  "name": "transform-pug-plain",
+  "name": "@pitlet/transform-pug-plain",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

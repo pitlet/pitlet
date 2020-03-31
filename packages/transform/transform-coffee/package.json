@@ -1,5 +1,5 @@
 {
-  "name": "transform-coffee",
+  "name": "@pitlet/transform-coffee",
   "version": "1.0.0-dev",
   "description": "",
   "main": "dist/transform.js",

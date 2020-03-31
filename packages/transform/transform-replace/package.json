@@ -1,5 +1,5 @@
 {
-  "name": "transform-replace",
+  "name": "@pitlet/transform-replace",
   "version": "1.0.0-dev",
   "scripts": {
     "test": "jest",

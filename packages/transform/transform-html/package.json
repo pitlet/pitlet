@@ -1,5 +1,5 @@
 {
-  "name": "transform-html",
+  "name": "@pitlet/transform-html",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
