@@ -1,13 +1,14 @@
 {
   "name": "@pitlet/transform-vue",
-  "version": "0.0.0-dev",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "build": "tsc -b",
     "example": "node example/bsp.config.js",
-    "build-example": "ts-node example/bsp.config.ts"
+    "build-example": "ts-node example/bsp.config.ts",
+    "release": "npm publish --access public"
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.0-alpha.8"

@@ -1,10 +1,11 @@
 {
   "name": "@pitlet/transform-ts-with-babel",
-  "version": "0.0.0-dev",
-  "main": "dist/transformReact.js",
+  "version": "1.0.0",
+  "main": "dist/transformTsWithBabel.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "jest"
+    "test": "jest",
+    "release": "npm publish --access public"
   },
   "peerDependencies": {
     "@babel/core": "^7.8.7"

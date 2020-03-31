@@ -1,10 +1,11 @@
 {
   "name": "@pitlet/transform-react",
-  "version": "0.0.0-dev",
+  "version": "1.0.0",
   "main": "dist/transformReact.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "jest"
+    "test": "jest",
+    "release": "npm publish --access public"
   },
   "peerDependencies": {
     "@babel/core": "^7.8.7"
