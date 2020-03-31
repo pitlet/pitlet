@@ -22,6 +22,10 @@ https://github.com/gregberge/svgr
 https://github.com/gisikw/xml-loader/blob/master/index.js
 https://github.com/wasm-tool/emscripten/blob/master/loader.js
 https://github.com/WebHotelier/webpack-fast-refresh
+https://github.com/fathyb/parcel-plugin-angular
+preact
+ember
+jquery
 
 unrelated:
 https://github.com/stephencookdev/speed-measure-webpack-plugin

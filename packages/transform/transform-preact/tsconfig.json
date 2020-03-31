@@ -2,9 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "types": ["jest"],
+    "skipLibCheck": true,
     "outDir": "dist",
-    "skipLibCheck": true
+    "types": ["jest"],
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src"]
 }
