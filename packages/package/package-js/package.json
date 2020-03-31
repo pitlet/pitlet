@@ -1,13 +1,14 @@
 {
-  "name": "package-js",
-  "version": "0.0.0-dev",
+  "name": "@pitlet/package-js",
+  "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/packageJs.js",
   "scripts": {
     "test": "jest",
     "build": "tsc -b",
     "dev": "tsc -b -w",
-    "example": "ts-node example/bsp.config.ts"
+    "example": "ts-node example/bsp.config.ts",
+    "release": "npm publish --access public"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
