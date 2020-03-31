@@ -21,6 +21,9 @@ const getType = asset => {
     if (asset.meta.id.endsWith('.js')) {
       return 'js'
     }
+    if (asset.meta.id.endsWith('.ts')) {
+      return 'ts'
+    }
   }
   throw new Error(`unknown type ${JSON.stringify(asset)}`)
 }

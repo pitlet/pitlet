@@ -30,7 +30,7 @@ const hmrApply = ({id, content, dependencyMap}) => {
   const fn = (exports, require) => eval(content)
   modules[id] = [fn, dependencyMap]
 }
-const webSocket = new WebSocket("ws://localhost:3000")
+const webSocket = new WebSocket(\`ws://\${location.host}\`)
 webSocket.onmessage = ({data}) => {
   const {command, payload} = JSON.parse(data)
   for(const transformedAsset of payload.transformedAssets){
