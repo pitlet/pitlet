@@ -23,6 +23,11 @@ https://github.com/gisikw/xml-loader/blob/master/index.js
 https://github.com/wasm-tool/emscripten/blob/master/loader.js
 https://github.com/WebHotelier/webpack-fast-refresh
 https://github.com/fathyb/parcel-plugin-angular
+https://github.com/JetBrains/svg-sprite-loader/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+https://github.com/zouhir/lqip-loader
+https://github.com/ethul/purs-loader
+https://github.com/aui/art-template
+https://github.com/difelice/ejs-loader
 preact
 ember
 jquery

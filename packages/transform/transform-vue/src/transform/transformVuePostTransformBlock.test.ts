@@ -18,7 +18,7 @@ console.log(NUMBERS.ONE + NUMBERS.ONE);
         names: [],
         mappings: 'AAEA,OAAO,CAAC,GAAG,CAAC,0BAA0B',
       },
-      vueOriginalSource: 'App.vue',
+      vueOriginalSource: 'src/App.vue',
       vueOriginalSourceContent: `<template>
   <h1>hello world</h1>
 </template>
@@ -40,7 +40,7 @@ console.log(NUMBERS.ONE + NUMBERS.ONE);
       sourceMap: {
         version: 3,
         file: 'index.js',
-        sources: ['App.vue'],
+        sources: ['src/App.vue'],
         sourcesContent: [
           `<template>
   <h1>hello world</h1>

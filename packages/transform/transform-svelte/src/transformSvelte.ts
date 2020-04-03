@@ -2,8 +2,9 @@ import { compile } from 'svelte/compiler'
 
 export const transformSvelte = (api, options) => async asset => {
   const { content, sourceMap, ...otherMeta } = asset.meta
-  const { js, css } = compile(content)
-  css
+  const { js, css } = compile(content, {
+    // dev: true,
+  })
   const transformed = {
     protocol: 'virtual',
     meta: {

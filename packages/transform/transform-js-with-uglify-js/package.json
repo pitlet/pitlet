@@ -1,0 +1,20 @@
+{
+  "name": "@pitlet/transform-js-with-uglify-js",
+  "version": "1.0.0-dev",
+  "main": "dist/transformJsWithUglifyJs.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b",
+    "dev": "tsc -b -w"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "@types/uglify-js": "^3.0.5",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "uglify-js": "^3.8.1"
+  }
+}

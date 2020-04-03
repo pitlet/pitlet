@@ -1,0 +1,22 @@
+{
+  "name": "bsp-transform-cowsay",
+  "version": "1.0.0-dev",
+  "description": "",
+  "main": "./dist/transform.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "cowsay": "^1.4.0"
+  }
+}

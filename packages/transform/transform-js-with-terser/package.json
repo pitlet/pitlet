@@ -1,0 +1,19 @@
+{
+  "name": "@pitlet/transform-js-with-terser",
+  "version": "1.0.0-dev",
+  "main": "dist/transformJsWithTerser.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b",
+    "dev": "tsc -b -w"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "terser": "^4.6.10"
+  }
+}

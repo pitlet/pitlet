@@ -1,0 +1,19 @@
+{
+  "name": "@pitlet/transform-yml-to-json",
+  "version": "1.0.0-dev",
+  "scripts": {
+    "dev": "tsc -b -w",
+    "build": "tsc -b",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "@types/js-yaml": "^3.12.3",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.1"
+  }
+}

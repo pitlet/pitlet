@@ -1,17 +1,17 @@
 const OFFSET_CHAR_MAP = [
-  'A',
-  'C',
-  'E',
-  'G',
-  'I',
-  'K',
-  'M',
-  'O',
-  'Q',
-  'S',
-  'U',
-  'W',
-  'Y',
+  'A', // 0
+  'C', // 1
+  'E', // 2
+  'G', // 3
+  'I', // 4
+  'K', // 5
+  'M', // 6
+  'O', // 7
+  'Q', // 8
+  'S', // 9
+  'U', // 10
+  'W', // 11
+  'Y', // 12
 ]
 
 // TODO this is better but there is a bug with quokka atm
@@ -31,12 +31,18 @@ const getCharOffset = (char: string) => {
   return REVERSE_OFFSET_MAP[char]
 }
 
-const getOffsetString = (offset: number) => {
+/**
+ * Generates an empty mapping for the first x lines
+ * @param offset - number of lines with an empty mapping
+ * @example
+ * getEmptyMapping(2) // `AAEA`
+ */
+const getEmptyMapping = (offset: number) => {
   if (offset > OFFSET_CHAR_MAP.length) {
     throw new Error('no')
   }
   const char = OFFSET_CHAR_MAP[offset]
-  return `AA${char}A`
+  return `AA${char}A` // empty mapping for the first x lines
 }
 
 const getTransformedSourceMap = ({
@@ -55,12 +61,12 @@ const getTransformedSourceMap = ({
       originalMappings = ''
     }
   }
-  const offsetString = getOffsetString(vueBlockOffset)
+  const emptyMapping = getEmptyMapping(vueBlockOffset)
   const transformedSourceMap = {
     ...sourceMap,
     sources: [vueOriginalSource],
     sourcesContent: [vueOriginalSourceContent],
-    mappings: offsetString + ',' + originalMappings,
+    mappings: emptyMapping + ',' + originalMappings,
   }
   return transformedSourceMap
 }

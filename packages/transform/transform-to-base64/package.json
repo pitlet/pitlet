@@ -1,0 +1,20 @@
+{
+  "name": "@pitlet/transform-to-base64",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/transformToBase64.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "@types/node": "^13.11.0",
+    "jest": "^25.2.7",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  }
+}

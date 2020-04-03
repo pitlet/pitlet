@@ -3,8 +3,7 @@
     "target": "ESNext",
     "module": "CommonJS",
     "types": ["jest"],
-    "outDir": "dist",
-    "skipLibCheck": true
+    "outDir": "dist"
   },
   "include": ["src"]
 }

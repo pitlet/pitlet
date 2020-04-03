@@ -32,17 +32,35 @@ const hmrApply = ({id, content, dependencyMap}) => {
 }
 const webSocket = new WebSocket(\`ws://\${location.host}\`)
 webSocket.onmessage = ({data}) => {
-  const {command, payload} = JSON.parse(data)
-  for(const transformedAsset of payload.transformedAssets){
-    const {id, content} = transformedAsset.meta
-    const oldModule = modules[id]
-    if(!oldModule){
-      throw new Error(\`cannot find module "\${id}"\`)
+  const {commands} = JSON.parse(data)
+  for(const {command, payload} of commands){
+    switch (command) {
+      case 'DELETE':
+        console.log('delete')
+        delete modules[payload.id]
+        break;
+      case 'ADD':
+        console.log('add')
+        const oldModule = modules[payload.meta.id]
+        if(oldModule){
+          throw new Error('module already exists')
+        }
+        //if(!oldModule){
+        //  throw new Error(\`cannot find module "\${id}"\`)
+        //}
+        break;
+
+      default:
+        break;
     }
-    const dependencyMap = oldModule[1]
-    hmrApply({id, content, dependencyMap})
-    delete moduleCache[id]
   }
+  // for(const transformedAsset of payload.transformedAssets){
+  //   const {id, content} = transformedAsset.meta
+
+  //   const dependencyMap = oldModule[1]
+  //   hmrApply({id, content, dependencyMap})
+  //   delete moduleCache[id]
+  // }
   delete moduleCache[entry]
   require(entry)
 }
