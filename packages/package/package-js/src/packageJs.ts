@@ -96,6 +96,7 @@ const hmrRun = id => {
   delete moduleCache[id]
   if('.' in accept){
     console.log('run .')
+    require(id)
     accept['.']()
   } else {
     const parentIds = getParentIds(id)
@@ -133,7 +134,7 @@ webSocket.onmessage = ({data}) => {
     switch (type) {
       case 'UPDATE_MODULE_CONTENT': {
         const {id, content} = payload
-        modules[id][0] = (exports, require) => eval(content)
+        modules[id][0] = (exports, require, module) => eval(content)
         delete moduleCache[id]
         if(willHmrBeAccepted(id)){
           const start = performance.now()
@@ -150,6 +151,7 @@ webSocket.onmessage = ({data}) => {
         const {id, dependencyMap} = payload
         delete moduleCache[id]
         modules[id][1] = dependencyMap
+        break
       }
       default: {
         console.warn(\`unknown message type \${type}\`)
