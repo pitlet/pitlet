@@ -8,6 +8,7 @@
     "types": ["jest"],
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
     "esModuleInterop": true
   },
   "include": ["src"]

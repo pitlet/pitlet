@@ -161,7 +161,11 @@ interface IndexSourceMap {
   readonly sourceRoot: string
 }
 
-export const packageJs = async (assets, workspaceFolder, entryId) => {
+export const packageJs = async (
+  assets,
+  workspaceFolder: string,
+  entryId: string,
+) => {
   let jsModulesCode = `export const modules = {\n`
   let lineOffset = 2
   const sourceRoot = workspaceFolder

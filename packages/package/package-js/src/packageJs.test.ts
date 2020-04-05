@@ -5,7 +5,7 @@ test('basic', async () => {
     {
       protocol: 'virtual',
       meta: {
-        type: 'js',
+        type: 'js-module',
         id: `/test/index.js`,
         content: `const _add = require('./add')
 const result = _add.add(1,2)`,
@@ -26,7 +26,7 @@ const result = _add.add(1,2)`,
     {
       protocol: 'virtual',
       meta: {
-        type: 'js',
+        type: 'js-module',
         id: '/test/add.js',
         content: 'exports.add = (a,b) => a + b',
         directDependencies: [],
@@ -34,30 +34,42 @@ const result = _add.add(1,2)`,
       },
     },
   ]
-  const packaged = await packageJs(assets, assets[1], '/test')
-  expect(packaged).toEqual([
-    {
-      type: 'write',
-      destinationPath: 'modules.js',
-      content: `export const modules = {
-"/test/index.js": [(exports, require) => {
+  const packaged = await packageJs(assets, '/test', assets[0].meta.id)
+  const entry = packaged.find(
+    operation => operation.destinationPath === 'entry.js',
+  )
+  const modules = packaged.find(
+    operation => operation.destinationPath === 'modules.js',
+  )
+  const modulesMap = packaged.find(
+    operation => operation.destinationPath === 'modules.js.map',
+  )
+  expect(entry).toEqual({
+    type: 'write',
+    destinationPath: 'entry.js',
+    content: `export const entry = "/test/index.js"`,
+  })
+  expect(modules).toEqual({
+    type: 'write',
+    destinationPath: 'modules.js',
+    content: `export const modules = {
+"/test/index.js": [(exports, require, module) => {
 const _add = require('./add')
 const result = _add.add(1,2)
 },{"./add.js":"/test/add.js"}],
-"/test/add.js": [(exports, require) => {
+"/test/add.js": [(exports, require, module) => {
 exports.add = (a,b) => a + b
 },{}],
 
 }
 //# sourceMappingURL=./modules.js.map
 `,
-    },
-    {
-      type: 'write',
-      destinationPath: 'modules.js.map',
-      content: `{"version":3,"file":"modules.js","sections":[],"sourceRoot":"/test"}`,
-    },
-  ])
+  })
+  expect(modulesMap).toEqual({
+    type: 'write',
+    destinationPath: 'modules.js.map',
+    content: `{"version":3,"file":"modules.js","sections":[],"sourceRoot":"/test"}`,
+  })
 })
 
 test('empty file', async () => {
@@ -65,7 +77,7 @@ test('empty file', async () => {
     {
       protocol: 'virtual',
       meta: {
-        type: 'js',
+        type: 'js-module',
         id: '/test/index.js',
         content: '',
         directDependencies: [],
@@ -73,24 +85,36 @@ test('empty file', async () => {
       },
     },
   ]
-  const packaged = await packageJs(assets, assets[0], '/test')
-  expect(packaged).toEqual([
-    {
-      type: 'write',
-      destinationPath: 'modules.js',
-      content: `export const modules = {
-"/test/index.js": [(exports, require) => {
+  const packaged = await packageJs(assets, '/test', assets[0].meta.id)
+  const entry = packaged.find(
+    operation => operation.destinationPath === 'entry.js',
+  )
+  const modules = packaged.find(
+    operation => operation.destinationPath === 'modules.js',
+  )
+  const modulesMap = packaged.find(
+    operation => operation.destinationPath === 'modules.js.map',
+  )
+  expect(entry).toEqual({
+    type: 'write',
+    destinationPath: 'entry.js',
+    content: `export const entry = "/test/index.js"`,
+  })
+  expect(modules).toEqual({
+    type: 'write',
+    destinationPath: 'modules.js',
+    content: `export const modules = {
+"/test/index.js": [(exports, require, module) => {
 
 },{}],
 
 }
 //# sourceMappingURL=./modules.js.map
 `,
-    },
-    {
-      type: 'write',
-      destinationPath: 'modules.js.map',
-      content: `{"version":3,"file":"modules.js","sections":[],"sourceRoot":"/test"}`,
-    },
-  ])
+  })
+  expect(modulesMap).toEqual({
+    type: 'write',
+    destinationPath: 'modules.js.map',
+    content: `{"version":3,"file":"modules.js","sections":[],"sourceRoot":"/test"}`,
+  })
 })
