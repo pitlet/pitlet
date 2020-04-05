@@ -14,11 +14,9 @@ const generateScriptHotReloadCode = (id, scriptRequest) => `
     script.render = render
     api.reload('${id}', script)
   })`
-const generateHotReloadCode = (
-  id,
-  templateRequest,
-  scriptRequest,
-) => `/* hot reload */
+const generateHotReloadCode = (id, templateRequest, scriptRequest) => `
+
+/* hot reload */
 if(module.hot){
   script.__hmrId = '${id}'
   const api = __VUE_HMR_RUNTIME__
@@ -26,10 +24,9 @@ if(module.hot){
     // console.log('vue api reload')
     api.reload('${id}', script)
   }
-  ${templateRequest ? generateTemplateHotReloadCode(id, templateRequest) : ''}
-  ${scriptRequest ? generateScriptHotReloadCode(id, scriptRequest) : ''}
-}
-`
+${templateRequest ? generateTemplateHotReloadCode(id, templateRequest) : ''}
+${scriptRequest ? generateScriptHotReloadCode(id, scriptRequest) : ''}
+}`
 export const transformVue = async asset => {
   // console.log(asset)
   const { content, ...otherMeta } = asset.meta

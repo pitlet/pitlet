@@ -31,6 +31,27 @@ import script from './index.vue?type=script&lang=js'
 import './index.vue?type=style&index=0&lang=css'
 script.render = render
 
+/* hot reload */
+if(module.hot){
+  script.__hmrId = '/test/src/App.vue'
+  const api = __VUE_HMR_RUNTIME__
+  if(!api.createRecord('/test/src/App.vue', script)){
+    // console.log('vue api reload')
+    api.reload('/test/src/App.vue', script)
+  }
+
+  module.hot.accept('./index.vue?type=template&lang=html', () => {
+    const {render} = require('./index.vue?type=template&lang=html')
+    api.rerender('/test/src/App.vue', render)
+  })
+
+  module.hot.accept('./index.vue?type=script&lang=js', () => {
+    const script = require('./index.vue?type=script&lang=js').default
+    script.render = render
+    api.reload('/test/src/App.vue', script)
+  })
+}
+
 export default script`,
       directDependencies: [
         {
@@ -104,6 +125,27 @@ import script from './index.vue?type=script&lang=ts'
 import './index.vue?type=style&index=0&lang=scss'
 script.render = render
 
+/* hot reload */
+if(module.hot){
+  script.__hmrId = '/test/src/App.vue'
+  const api = __VUE_HMR_RUNTIME__
+  if(!api.createRecord('/test/src/App.vue', script)){
+    // console.log('vue api reload')
+    api.reload('/test/src/App.vue', script)
+  }
+
+  module.hot.accept('./index.vue?type=template&lang=pug', () => {
+    const {render} = require('./index.vue?type=template&lang=pug')
+    api.rerender('/test/src/App.vue', render)
+  })
+
+  module.hot.accept('./index.vue?type=script&lang=ts', () => {
+    const script = require('./index.vue?type=script&lang=ts').default
+    script.render = render
+    api.reload('/test/src/App.vue', script)
+  })
+}
+
 export default script`,
       directDependencies: [
         {
@@ -166,6 +208,27 @@ import script from './index.vue?type=script&lang=js'
 
 import './index.vue?type=style&index=0&lang=css'
 script.render = render
+
+/* hot reload */
+if(module.hot){
+  script.__hmrId = 'undefined'
+  const api = __VUE_HMR_RUNTIME__
+  if(!api.createRecord('undefined', script)){
+    // console.log('vue api reload')
+    api.reload('undefined', script)
+  }
+
+  module.hot.accept('./index.vue?type=template&lang=html', () => {
+    const {render} = require('./index.vue?type=template&lang=html')
+    api.rerender('undefined', render)
+  })
+
+  module.hot.accept('./index.vue?type=script&lang=js', () => {
+    const script = require('./index.vue?type=script&lang=js').default
+    script.render = render
+    api.reload('undefined', script)
+  })
+}
 
 export default script`,
       directDependencies: [

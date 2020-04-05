@@ -1,6 +1,6 @@
 {
   "name": "@pitlet/transform-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -9,21 +9,22 @@
     "dev": "tsc -b -w",
     "example": "node example/bsp.config.js",
     "build-example": "ts-node example/bsp.config.ts",
+    "prepack": "npm test",
     "release": "npm publish --access public"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.0.0-alpha.8"
+    "@vue/compiler-sfc": "^3.0.0-alpha.11"
   },
   "peerDependencies": {
-    "vue": "^3.0.0-alpha.1"
+    "vue": "^3.0.0-alpha.11"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "jest": "^25.1.0",
+    "@types/jest": "^25.2.1",
+    "jest": "^25.2.7",
     "nodemon": "^2.0.2",
-    "ts-jest": "^25.2.1",
-    "ts-node": "^8.8.1",
+    "ts-jest": "^25.3.1",
+    "ts-node": "^8.8.2",
     "typescript": "^3.8.3",
-    "vue": "^3.0.0-alpha.10"
+    "vue": "^3.0.0-alpha.11"
   }
 }
