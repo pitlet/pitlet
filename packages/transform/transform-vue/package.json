@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -b",
+    "dev": "tsc -b -w",
     "example": "node example/bsp.config.js",
     "build-example": "ts-node example/bsp.config.ts",
     "release": "npm publish --access public"

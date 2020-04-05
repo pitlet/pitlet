@@ -44,3 +44,17 @@ Related Projects:
 - https://github.com/jlongster/monkey-hot-loader/issues/4
 - https://github.com/milankinen/livereactload/issues/50
 -
+
+<!-- TODO hmrrun2
+
+// const hmrRun2 = (id, dependencyId) => {
+//   const {accept, dispose} = hmrCache[id]
+//   for(const [file, fn] of Object.entries(dispose)){
+//     fn()
+//   }
+//   delete moduleCache[id]
+//   delete moduleCache[dependencyId]
+//   require(id)
+// }
+
+ -->

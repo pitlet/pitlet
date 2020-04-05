@@ -4,10 +4,6 @@ const JS_MODULE_SYSTEM_CODE = `import {modules} from './modules.js'
 export const moduleCache = Object.create(null)
 export const hmrCache = Object.create(null)
 
-const hmrAcceptCheck = () => {
-
-}
-
 export const require = id => {
   if(!modules[id]){
     throw new Error(\`cannot find module "\${id}"\`)
@@ -44,15 +40,10 @@ const JS_RUNTIME_HMR_CODE = `import {modules} from './modules.js'
 import {moduleCache, hmrCache, require} from './moduleSystem.js'
 import {entry} from './entry.js'
 
-window.pitlet = window.pitlet || Object.create(null)
-window.pitlet.modules = modules
-window.pitlet.moduleCache = moduleCache
-window.pitlet.hmrCache = hmrCache
-window.pitlet.require = require
-
 const getParentIds = id => Object.entries(modules).filter(([moduleId, [_, dependencyMap]]) => Object.values(dependencyMap).includes(id)).map(([moduleId, [_, dependencyMap]])=>moduleId)
 
-window.pitlet.getParentIds = getParentIds
+window.getParentIds = getParentIds
+window.hmrCache = hmrCache
 
 /*
  * Checks wether or not a parent module calls \`module.hot.accept\`.
@@ -68,17 +59,10 @@ const willHmrBeAccepted = id => {
   if(parentIds.length === 0){
     return false
   }
-  return parentIds.every(parentId => {
-    const {accept: parentAccept} = hmrCache[parentId]
-    for(const [relativePath, fn] of Object.entries(parentAccept)){
-      if(modules[parentId][1][relativePath] === id){
-        return true
-      }
-    }
-  })
+  return parentIds.every(willHmrBeAccepted)
 }
 
-window.pitlet.willHmrBeAccepted = willHmrBeAccepted
+window.willHmrBeAccepted = willHmrBeAccepted
 
 /**
  * Runs the code to update the modules. It invokes the
@@ -86,11 +70,11 @@ window.pitlet.willHmrBeAccepted = willHmrBeAccepted
  * \`module.hot.accept\` to do so.
  */
 const hmrRun = id => {
-  const {accept} = hmrCache[id]
   delete moduleCache[id]
+  const {accept} = hmrCache[id]
   if('.' in accept){
-    console.log('run .')
-    accept['.']()
+    const fn = accept['.']
+    fn()
   } else {
     const parentIds = getParentIds(id)
     for(const parentId of parentIds){
@@ -104,9 +88,10 @@ const hmrRun = id => {
   }
 }
 
-window.pitlet.times=[]
-window.pitlet.getAverage = () => {
-  const array = window.pitlet.times
+
+window.times=[]
+window.getAverage = () => {
+  const array = window.times
   const n = array.length;
   const mean = array.reduce((a,b) => a+b)/n;
   const s = Math.sqrt(array.map(x => Math.pow(x-mean,2)).reduce((a,b) => a+b)/n);
@@ -116,7 +101,7 @@ window.pitlet.getAverage = () => {
   }
 }
 
-window.pitlet.getLatestTimes = () => {
+window.getLatestTimes = () => {
   return times.slice(-10).map(x=> x + 'ms').join(', ')
 }
 
@@ -128,15 +113,15 @@ webSocket.onmessage = ({data}) => {
       case 'UPDATE_MODULE_CONTENT': {
         const {id, content} = payload
         modules[id][0] = (exports, require) => eval(content)
-        delete moduleCache[id]
+        console.log(id)
+        console.log('will'+willHmrBeAccepted(id))
         if(willHmrBeAccepted(id)){
           const start = performance.now()
           hmrRun(id)
           const end = performance.now()
-          window.pitlet.times.push(end-start)
-          // console.log('hmr took'+(end-start)+'ms')
+          window.times.push(end-start)
         } else {
-          window.location.reload()
+          // window.location.reload()
         }
         break
       }

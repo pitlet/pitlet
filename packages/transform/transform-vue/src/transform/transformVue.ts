@@ -2,6 +2,34 @@ import { parse } from '@vue/compiler-sfc'
 
 const getFileName = asset => 'index.vue'
 
+const generateTemplateHotReloadCode = (id, templateRequest) => `
+  module.hot.accept('${templateRequest}', () => {
+    const {render} = require('${templateRequest}')
+    api.rerender('${id}', render)
+  })`
+
+const generateScriptHotReloadCode = (id, scriptRequest) => `
+  module.hot.accept('${scriptRequest}', () => {
+    const script = require('${scriptRequest}').default
+    script.render = render
+    api.reload('${id}', script)
+  })`
+const generateHotReloadCode = (
+  id,
+  templateRequest,
+  scriptRequest,
+) => `/* hot reload */
+if(module.hot){
+  script.__hmrId = '${id}'
+  const api = __VUE_HMR_RUNTIME__
+  if(!api.createRecord('${id}', script)){
+    // console.log('vue api reload')
+    api.reload('${id}', script)
+  }
+  ${templateRequest ? generateTemplateHotReloadCode(id, templateRequest) : ''}
+  ${scriptRequest ? generateScriptHotReloadCode(id, scriptRequest) : ''}
+}
+`
 export const transformVue = async asset => {
   // console.log(asset)
   const { content, ...otherMeta } = asset.meta
@@ -44,11 +72,12 @@ export const transformVue = async asset => {
     }
   }
   let scriptImport = `const script = {}`
+  let scriptRequest
   if (descriptor.script) {
     const block = descriptor.script
     const blockLang = block.lang || 'js'
     const queryString = `?type=script&lang=${blockLang}`
-    const scriptRequest = `./${fileName}${queryString}`
+    scriptRequest = `./${fileName}${queryString}`
     scriptImport = `import script from '${scriptRequest}'\n`
     const blockType = `vue-${blockLang}`
     if (block.src) {
@@ -105,6 +134,8 @@ export const transformVue = async asset => {
     stylesCode,
     'script.render = render',
   ].join('\n')
+  const id = asset.meta.id
+  code += generateHotReloadCode(id, templateRequest, scriptRequest)
   code += `\n\nexport default script`
   const transformed = {
     protocol: 'virtual',
