@@ -17,7 +17,13 @@ export const require = id => {
     return moduleCache[id]
   }
   const resolve = relativeImport => modules[id][1][relativeImport]
-  const localRequire = relativeImport => require(resolve(relativeImport))
+  const localRequire = relativeImport => {
+    const resolved = resolve(relativeImport)
+    if(!resolved){
+      throw new Error(\`Cannot resolve module "\${relativeImport}" inside module "\${id}"\`)
+    }
+    return require(resolved)
+  }
   const exports = {}
   // this will prevent infinite 'require' loop
   // from circular dependencies
@@ -139,6 +145,11 @@ webSocket.onmessage = ({data}) => {
           window.location.reload()
         }
         break
+      }
+      case 'UPDATE_MODULE_DEPENDENCIES': {
+        const {id, dependencyMap} = payload
+        delete moduleCache[id]
+        modules[id][1] = dependencyMap
       }
       default: {
         console.warn(\`unknown message type \${type}\`)
