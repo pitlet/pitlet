@@ -180,7 +180,7 @@ export const packageJs = async (
   entryId: string,
 ) => {
   let jsModulesCode = `export const modules = {\n`
-  let lineOffset = 2
+  let lineOffset = 1
   const sourceRoot = workspaceFolder
   const sourceMap = {
     version: 3,
