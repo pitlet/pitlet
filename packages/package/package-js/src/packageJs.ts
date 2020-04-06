@@ -52,6 +52,7 @@ import {entry} from './entry.js'
 
 window.pitlet = window.pitlet || Object.create(null)
 window.pitlet.modules = modules
+window.pitlet.getModuleIds = () => Object.keys(modules)
 window.pitlet.moduleCache = moduleCache
 window.pitlet.hmrCache = hmrCache
 window.pitlet.require = require
