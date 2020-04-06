@@ -96,7 +96,6 @@ const hmrRun = id => {
   const {accept} = hmrCache[id]
   delete moduleCache[id]
   if('.' in accept){
-    console.log('run .')
     require(id)
     accept['.']()
   } else {
