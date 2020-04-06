@@ -63,3 +63,7 @@ test('relative import', async () => {
     },
   })
 })
+
+test('input sourcemap', () => {
+  // TODO
+})

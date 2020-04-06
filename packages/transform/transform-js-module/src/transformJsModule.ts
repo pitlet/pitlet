@@ -32,7 +32,12 @@ const BABEL_TRANSFORM_OPTIONS: babel.TransformOptions = {
   ],
 }
 
-const transform = async (id: string, ast: babel.types.File, code: string) => {
+const transform = async (
+  id: string,
+  ast: babel.types.File,
+  code: string,
+  inputSourceMap: any,
+) => {
   const {
     code: transformedCode,
     map: transformedSourceMap,
@@ -40,6 +45,7 @@ const transform = async (id: string, ast: babel.types.File, code: string) => {
     ...BABEL_TRANSFORM_OPTIONS,
     filename: id,
     sourceMaps: true,
+    inputSourceMap,
   })) as babel.BabelFileResult
   return {
     transformedCode,
@@ -60,6 +66,7 @@ export const transformJsModule = async asset => {
     asset.meta.id,
     ast,
     content,
+    sourceMap,
   )
   const transformed = {
     protocol: 'virtual',
