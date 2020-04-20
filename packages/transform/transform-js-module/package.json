@@ -1,6 +1,6 @@
 {
   "name": "@pitlet/transform-js-module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/transformJsModule.js",
   "scripts": {
     "build": "tsc -b",
