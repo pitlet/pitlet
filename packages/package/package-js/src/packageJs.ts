@@ -43,6 +43,7 @@ export const require = id => {
   // 'require'-ing the module,
   // exported stuff will assigned to 'exports'
   modules[id][0](exports, localRequire, module)
+  moduleCache[id] = module.exports
   return moduleCache[id]
 }
 `;
