@@ -1,5 +1,5 @@
 {
-  "name": "@pitlet/transform-js-with-terser",
+  "name": "@pitlet/transform-css-with-css-nano",
   "version": "1.0.0-dev",
   "main": "dist/transformCssWithCssnano.js",
   "scripts": {
