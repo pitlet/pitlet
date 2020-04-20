@@ -1,47 +1,55 @@
-import { collectAssets } from './collectAssets/collectAssets'
-import * as path from 'path'
-import * as fs from 'fs'
-import _resolve from 'resolve'
+import { collectAssets } from "./collectAssets/collectAssets";
+import * as path from "path";
+import * as fs from "fs";
+import _resolve from "resolve";
 
 const assertDefined = (value: any) => {
   if (!value) {
-    throw new Error('expected value to be defined')
+    throw new Error("expected value to be defined");
   }
-}
+};
 
 export const resolve = async (importee, importer) => {
   return new Promise<string>((resolvePromise, rejectPromise) => {
     _resolve(
       importee,
-      { basedir: path.dirname(importer) },
+      {
+        basedir: path.dirname(importer),
+        packageFilter(pkg) {
+          if (pkg.module) {
+            pkg.main = pkg.module;
+          }
+          return pkg;
+        },
+      },
       (error, resolved) => {
         if (error) {
-          rejectPromise(error)
+          rejectPromise(error);
         }
-        resolvePromise(resolved)
-      },
-    )
-  })
+        resolvePromise(resolved);
+      }
+    );
+  });
   // if (importee.startsWith('./')) {
   //   const dirname = path.dirname(importer)
   //   return path.join(dirname, 'App.vue')
   //   // return importer.slice()
   // }
   // throw new Error(`cannot resolve module ${importee}`)
-}
+};
 
-const getContent = async id => {
-  assertDefined(id)
+const getContent = async (id) => {
+  assertDefined(id);
   return new Promise<string>((resolve, reject) => {
     fs.readFile(id, (error, data) => {
       if (error) {
-        reject(error)
+        reject(error);
       } else {
-        resolve(data.toString())
+        resolve(data.toString());
       }
-    })
-  })
-}
+    });
+  });
+};
 
 // export const write = async (outDir, packageOperations) => {}
 
@@ -66,7 +74,7 @@ const getContent = async id => {
 export const nodeBundler = {
   resolve,
   getContent,
-}
+};
 
 // export const createNodeBundler = ()=>{}
 // export const bundle = ({ entry, outDir }) => {
