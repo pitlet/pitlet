@@ -1,20 +1,19 @@
 {
   "name": "@pitlet/package-js",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "dist/packageJs.js",
   "scripts": {
     "test": "jest",
     "build": "tsc -b",
     "dev": "tsc -b -w",
-    "example": "ts-node example/bsp.config.ts",
-    "prepack": "npm test",
+    "prepublishOnly": "npm run build && npm test",
     "release": "npm publish --access public"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
-    "jest": "^25.2.7",
-    "ts-jest": "^25.3.1",
+    "jest": "^25.4.0",
+    "ts-jest": "^25.4.0",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   }

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from "lodash";
 
 const JS_MODULE_SYSTEM_CODE = `import {modules} from './modules.js'
 export const moduleCache = Object.create(null)
@@ -44,7 +44,7 @@ export const require = id => {
   modules[id][0](exports, localRequire, module)
   return moduleCache[id]
 }
-`
+`;
 
 const JS_RUNTIME_HMR_CODE = `import {modules} from './modules.js'
 import {moduleCache, hmrCache, require} from './moduleSystem.js'
@@ -160,39 +160,46 @@ webSocket.onmessage = ({data}) => {
     }
   }
 }
-`
+`;
 
-const JS_RUNTIME_CODE = `import {entry} from './entry.js'
+const JS_GLOBAL_CODE = `window.process = {
+  env: {
+    NODE_ENV: 'development'
+  }
+}`;
+
+const JS_RUNTIME_CODE = `import './global.js'
+import {entry} from './entry.js'
 import {require} from './moduleSystem.js'
 require(entry)
-`
+`;
 
 interface IndexSourceMap {
-  readonly version: 3
-  readonly file: string
-  readonly sections: any[]
-  readonly sourceRoot: string
+  readonly version: 3;
+  readonly file: string;
+  readonly sections: any[];
+  readonly sourceRoot: string;
 }
 
 export const packageJs = async (
   assets,
   workspaceFolder: string,
-  entryId: string,
+  entryId: string
 ) => {
-  let jsModulesCode = `export const modules = {\n`
-  let lineOffset = 1
-  const sourceRoot = workspaceFolder
+  let jsModulesCode = `export const modules = {\n`;
+  let lineOffset = 1;
+  const sourceRoot = workspaceFolder;
   const sourceMap = {
     version: 3,
-    file: 'modules.js',
+    file: "modules.js",
     sections: [],
     sourceRoot,
-  }
+  };
   for (const jsAsset of assets) {
-    if (jsAsset.meta.type !== 'js-module') {
-      continue
+    if (jsAsset.meta.type !== "js-module") {
+      continue;
     }
-    lineOffset += 1 // because of module start
+    lineOffset += 1; // because of module start
 
     if (jsAsset.meta.sourceMap) {
       sourceMap.sections.push({
@@ -209,71 +216,76 @@ export const packageJs = async (
           sourcesContent: jsAsset.meta.sourceMap.sourcesContent,
           sourceRoot,
         },
-      })
+      });
     }
-    lineOffset += jsAsset.meta.content!.split('\n').length
-    lineOffset += 1 // because of module end
+    lineOffset += jsAsset.meta.content!.split("\n").length;
+    lineOffset += 1; // because of module end
     // const assetId = getAssetId(workspaceFolder, jsAsset.absolutePath)
     for (const directDependency of jsAsset.meta.directDependencies) {
       if (!directDependency.meta.importee) {
         // console.log(JSON.stringify(jsAsset.meta.directDependencies, null, 2))
-        throw new Error('must have id')
+        throw new Error("must have id");
       }
     }
     const dependencyMap = _.zipObject(
       jsAsset.meta.directDependencies!.map(
-        directDependency => directDependency.meta.importee,
+        (directDependency) => directDependency.meta.importee
       ),
       jsAsset.meta.resolvedDirectDependencies!.map(
-        resolvedDependency => resolvedDependency.meta.id,
-      ),
-    )
+        (resolvedDependency) => resolvedDependency.meta.id
+      )
+    );
     jsModulesCode += `"${jsAsset.meta.id}": [(exports, require, module) => {
 ${jsAsset.meta.content!}
-},${JSON.stringify(dependencyMap)}],\n`
+},${JSON.stringify(dependencyMap)}],\n`;
   }
-  jsModulesCode += '\n}\n'
-  const stringifiedSourceMap = JSON.stringify(sourceMap)
-  jsModulesCode += `//# sourceMappingURL=./modules.js.map`
-  jsModulesCode += '\n'
-  const jsEntryCode = `export const entry = "${entryId}"`
+  jsModulesCode += "\n}\n";
+  const stringifiedSourceMap = JSON.stringify(sourceMap);
+  jsModulesCode += `//# sourceMappingURL=./modules.js.map`;
+  jsModulesCode += "\n";
+  const jsEntryCode = `export const entry = "${entryId}"`;
   return [
     {
-      type: 'write',
-      destinationPath: 'modules.js',
+      type: "write",
+      destinationPath: "modules.js",
       content: jsModulesCode,
     },
     {
-      type: 'write',
-      destinationPath: 'modules.js.map',
+      type: "write",
+      destinationPath: "modules.js.map",
       content: stringifiedSourceMap,
     },
     {
-      type: 'write',
-      destinationPath: 'moduleSystem.js',
+      type: "write",
+      destinationPath: "moduleSystem.js",
       content: JS_MODULE_SYSTEM_CODE,
     },
     {
-      type: 'write',
-      destinationPath: 'entry.js',
+      type: "write",
+      destinationPath: "entry.js",
       content: jsEntryCode,
     },
     {
-      type: 'write',
-      destinationPath: 'runtime.js',
+      type: "write",
+      destinationPath: "global.js",
+      content: JS_GLOBAL_CODE,
+    },
+    {
+      type: "write",
+      destinationPath: "runtime.js",
       content: JS_RUNTIME_CODE,
     },
     {
-      type: 'write',
-      destinationPath: 'runtimeHmr.js',
+      type: "write",
+      destinationPath: "runtimeHmr.js",
       content: JS_RUNTIME_HMR_CODE,
     },
     {
-      type: 'write',
-      destinationPath: 'main.js',
-      content: ['runtime.js', 'runtimeHmr.js']
-        .map(runtime => `import './${runtime}'`)
-        .join('\n'),
+      type: "write",
+      destinationPath: "main.js",
+      content: ["runtime.js", "runtimeHmr.js"]
+        .map((runtime) => `import './${runtime}'`)
+        .join("\n"),
     },
-  ]
-}
+  ];
+};
