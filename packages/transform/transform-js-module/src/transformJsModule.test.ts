@@ -1,69 +1,101 @@
-import { transformJsModule } from './transformJsModule'
+import { transformJsModule } from "./transformJsModule";
 
-test('import from node_modules', async () => {
+test("import from node_modules", async () => {
   const asset = {
-    protocol: 'virtual',
+    protocol: "virtual",
     meta: {
       content: `import React from 'react'`,
     },
-  }
-  const transformed = await transformJsModule(asset)
+  };
+  const transformed = await transformJsModule(asset);
   expect(transformed).toEqual({
-    protocol: 'virtual',
+    protocol: "virtual",
     meta: {
-      type: 'js-module',
+      type: "js-module",
       content: `var _react = require("react");`,
       sourceMap: {
         version: 3,
-        mappings: 'AAAA',
+        mappings: "AAAA",
         names: [],
-        sources: ['unknown'],
+        sources: ["unknown"],
         sourcesContent: ["import React from 'react'"],
       },
       directDependencies: [
         {
-          protocol: 'filesystem',
+          protocol: "filesystem",
           meta: {
-            importee: 'react',
+            importee: "react",
           },
         },
       ],
     },
-  })
-})
+  });
+});
 
-test('relative import', async () => {
+test("relative import", async () => {
   const asset = {
-    protocol: 'virtual',
+    protocol: "virtual",
     meta: {
       content: `import foo from './foo'`,
     },
-  }
-  const transformed = await transformJsModule(asset)
+  };
+  const transformed = await transformJsModule(asset);
   expect(transformed).toEqual({
-    protocol: 'virtual',
+    protocol: "virtual",
     meta: {
-      type: 'js-module',
+      type: "js-module",
       content: `var _foo = require("./foo");`,
       sourceMap: {
         version: 3,
-        mappings: 'AAAA',
+        mappings: "AAAA",
         names: [],
-        sources: ['unknown'],
+        sources: ["unknown"],
         sourcesContent: ["import foo from './foo'"],
       },
       directDependencies: [
         {
-          protocol: 'filesystem',
+          protocol: "filesystem",
           meta: {
-            importee: './foo',
+            importee: "./foo",
           },
         },
       ],
     },
-  })
-})
+  });
+});
 
-test('input sourcemap', () => {
+test("input sourcemap", () => {
   // TODO
-})
+});
+
+test("commonjs dependencies", async () => {
+  const asset = {
+    protocol: "virtual",
+    meta: {
+      content: `const React = require("react")`,
+    },
+  };
+  const transformed = await transformJsModule(asset);
+  expect(transformed).toEqual({
+    protocol: "virtual",
+    meta: {
+      type: "js-module",
+      content: `const React = require("react");`,
+      sourceMap: {
+        version: 3,
+        mappings: "AAAA,MAAMA,KAAK,GAAGC,OAAO,CAAC,OAAD,CAArB",
+        names: ["React", "require"],
+        sources: ["unknown"],
+        sourcesContent: ['const React = require("react")'],
+      },
+      directDependencies: [
+        {
+          protocol: "filesystem",
+          meta: {
+            importee: "react",
+          },
+        },
+      ],
+    },
+  });
+});

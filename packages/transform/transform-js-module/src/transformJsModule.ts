@@ -1,20 +1,39 @@
-import * as babel from '@babel/core'
-import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
+import * as babel from "@babel/core";
+import babelPluginTransformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
+import traverse from "@babel/traverse";
 
 const getDirectDependencies = (ast: babel.types.File) => {
-  const { types: t } = babel
-  const imports = ast.program.body.filter(node =>
-    t.isImportDeclaration(node),
-  ) as babel.types.ImportDeclaration[]
-  const relativePaths = imports.map(node => node.source.value)
-  const dependencyAssets = relativePaths.map(relativePath => ({
-    protocol: 'filesystem',
+  const { types: t } = babel;
+  const imports = ast.program.body.filter((node) =>
+    t.isImportDeclaration(node)
+  ) as babel.types.ImportDeclaration[];
+  const relativePaths = imports.map((node) => node.source.value);
+  const dependencyAssets = relativePaths.map((relativePath) => ({
+    protocol: "filesystem",
     meta: {
       importee: relativePath,
     },
-  }))
-  return dependencyAssets
-}
+  }));
+  traverse(ast, {
+    enter(path) {
+      if (
+        t.isCallExpression(path.node) &&
+        t.isIdentifier(path.node.callee) &&
+        path.node.callee.name === "require" &&
+        t.isStringLiteral(path.node.arguments[0])
+      ) {
+        const importee = path.node.arguments[0].value;
+        dependencyAssets.push({
+          protocol: "filesystem",
+          meta: {
+            importee,
+          },
+        });
+      }
+    },
+  });
+  return dependencyAssets;
+};
 
 const BABEL_TRANSFORM_OPTIONS: babel.TransformOptions = {
   configFile: false,
@@ -30,13 +49,13 @@ const BABEL_TRANSFORM_OPTIONS: babel.TransformOptions = {
       },
     ],
   ],
-}
+};
 
 const transform = async (
   id: string,
   ast: babel.types.File,
   code: string,
-  inputSourceMap: any,
+  inputSourceMap: any
 ) => {
   const {
     code: transformedCode,
@@ -46,37 +65,37 @@ const transform = async (
     filename: id,
     sourceMaps: true,
     inputSourceMap,
-  })) as babel.BabelFileResult
+  })) as babel.BabelFileResult;
   return {
     transformedCode,
     transformedSourceMap,
-  }
-}
+  };
+};
 
-export const transformJsModule = async asset => {
+export const transformJsModule = async (asset) => {
   const {
     content,
     type,
     directDependencies,
     sourceMap,
     ...otherMeta
-  } = asset.meta
-  const ast = (await babel.parseAsync(content)) as babel.types.File
+  } = asset.meta;
+  const ast = (await babel.parseAsync(content)) as babel.types.File;
   const { transformedCode, transformedSourceMap } = await transform(
     asset.meta.id,
     ast,
     content,
-    sourceMap,
-  )
+    sourceMap
+  );
   const transformed = {
-    protocol: 'virtual',
+    protocol: "virtual",
     meta: {
       content: transformedCode,
       directDependencies: directDependencies || getDirectDependencies(ast),
       sourceMap: transformedSourceMap,
-      type: 'js-module',
+      type: "js-module",
       ...otherMeta,
     },
-  }
-  return transformed
-}
+  };
+  return transformed;
+};
