@@ -37,7 +37,7 @@ const getDirectDependencies = (ast: babel.types.File) => {
             importee,
           },
         })
-      } else if (t.isExportNamedDeclaration(path.node)) {
+      } else if (t.isExportNamedDeclaration(path.node) && path.node.source) {
         const importee = path.node.source.value
         dependencyAssets.push({
           protocol: 'filesystem',
