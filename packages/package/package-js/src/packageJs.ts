@@ -37,7 +37,8 @@ export const require = id => {
     hot: {
       accept: (file, fn) => hmrCache[id].accept[file] = fn,
       dispose: (file, fn) => hmrCache[id].dispose[file] = fn,
-    }
+    },
+    exports
   }
   // 'require'-ing the module,
   // exported stuff will assigned to 'exports'
