@@ -29,8 +29,8 @@ export const validateWithEslint = (options) => async (asset) => {
     content,
     id
   )
-  if (errorCount > 0 || warningCount > 0) {
-    console.log(results.map((x) => x.messages))
+  if (errorCount > 0) {
+    console.log(JSON.stringify(results.map((x) => x.messages)))
     throw new ValidationError()
   }
   return asset

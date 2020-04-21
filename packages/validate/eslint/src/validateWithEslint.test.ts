@@ -42,12 +42,13 @@ describe('vue', () => {
       extends: ['eslint:recommended', 'plugin:vue/recommended'],
     },
   }
+
   test('invalid code', async () => {
     const asset = {
       protocol: 'virtual',
       meta: {
         content: `<template>
-  <h1>hello world
+  <h1>hello world </
 </template>        `,
         id: '/test/index.vue',
       },
