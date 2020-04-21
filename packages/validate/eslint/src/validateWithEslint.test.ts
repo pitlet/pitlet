@@ -49,7 +49,7 @@ describe('vue', () => {
         content: `<template>
   <h1>hello world
 </template>        `,
-        absolutePath: '/test/index.vue',
+        id: '/test/index.vue',
       },
     }
     await expect(validateWithEslint(options)(asset)).rejects.toEqual(
@@ -64,7 +64,7 @@ describe('vue', () => {
         content: `<template>
   <h1>hello world</h1>
 </template>        `,
-        absolutePath: '/test/index.vue',
+        id: '/test/index.vue',
       },
     }
     await expect(validateWithEslint(options)(asset)).resolves.toBe(asset)

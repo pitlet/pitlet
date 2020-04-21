@@ -15,7 +15,7 @@ export interface ValidateWithEslintOptions {
 }
 
 export const validateWithEslint = (options) => async (asset) => {
-  const { content, absolutePath } = asset.meta
+  const { content, id } = asset.meta
   const engine = new CLIEngine({
     parserOptions: options.parserOptions,
     useEslintrc: false,
@@ -27,7 +27,7 @@ export const validateWithEslint = (options) => async (asset) => {
   })
   const { results, errorCount, warningCount } = engine.executeOnText(
     content,
-    absolutePath
+    id
   )
   if (errorCount > 0 || warningCount > 0) {
     console.log(results.map((x) => x.messages))
