@@ -1,6 +1,6 @@
 {
   "name": "@pitlet/transform-swc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/transformSwc.js",
   "scripts": {
     "build": "tsc -b",
