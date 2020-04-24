@@ -1,6 +1,6 @@
 {
   "name": "@pitlet/transform-vue",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev": "tsc -b -w",
     "example": "node example/bsp.config.js",
     "build-example": "ts-node example/bsp.config.ts",
-    "prepack": "npm test",
+    "prepublishOnly": "npm run build && npm test",
     "release": "npm publish --access public"
   },
   "dependencies": {

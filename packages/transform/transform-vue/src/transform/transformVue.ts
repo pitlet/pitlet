@@ -1,6 +1,6 @@
 import { parse } from '@vue/compiler-sfc'
 
-const getFileName = asset => 'index.vue'
+const getFileName = (asset) => 'index.vue'
 
 const generateTemplateHotReloadCode = (id, templateRequest) => `
   module.hot.accept('${templateRequest}', () => {
@@ -27,7 +27,7 @@ if(module.hot){
 ${templateRequest ? generateTemplateHotReloadCode(id, templateRequest) : ''}
 ${scriptRequest ? generateScriptHotReloadCode(id, scriptRequest) : ''}
 }`
-export const transformVue = async asset => {
+export const transformVue = async (asset) => {
   // console.log(asset)
   const { content, ...otherMeta } = asset.meta
   const { descriptor, errors } = parse(content, {
@@ -35,6 +35,8 @@ export const transformVue = async asset => {
     filename: asset.meta.id,
   })
   if (errors.length) {
+    // @ts-ignore
+    console.error(errors)
     throw new Error(errors[0].message)
   }
   const fileName = getFileName(asset)
