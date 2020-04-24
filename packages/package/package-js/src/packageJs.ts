@@ -95,11 +95,11 @@ window.pitlet.willHmrBeAccepted = willHmrBeAccepted
  * \`module.hot.accept\` to do so.
  */
 const hmrRun = id => {
+  const {accept} = hmrCache[id]
   delete moduleCache[id]
   if('.' in accept){
+    // run self-accepting module
     require(id)
-    //const {accept} = hmrCache[id]
-    //accept['.']()
   } else {
     const parentIds = getParentIds(id)
     for(const parentId of parentIds){

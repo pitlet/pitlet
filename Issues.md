@@ -13,3 +13,5 @@ however comments are helpful when debugging inside the generated code....
 
 
  -->
+
+<!-- TODO vue props don't update -->
