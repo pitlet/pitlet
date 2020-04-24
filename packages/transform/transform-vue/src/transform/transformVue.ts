@@ -36,11 +36,7 @@ export const transformVue = async (asset) => {
   })
   if (errors.length) {
     // @ts-ignore
-    console.error(errors)
-    // @ts-ignore
-    console.log(errors[0])
-    // @ts-ignore
-    console.log(errors[0].stack)
+    console.log(JSON.stringify(errors[0].loc))
     throw new Error(errors[0].message)
   }
   const fileName = getFileName(asset)
