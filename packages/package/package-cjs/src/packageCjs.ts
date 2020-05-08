@@ -103,7 +103,12 @@ webSocket.onmessage = ({data}) => {
         delete moduleCache[id]
         if(willHmrBeAccepted(id)){
           const start = performance.now()
-          hmrRun(id)
+          try {
+            hmrRun(id)
+          } catch (error) {
+            console.error('[HMR update failed]')
+            console.error(error)
+          }
           const end = performance.now()
         } else {
           window.location.reload()
