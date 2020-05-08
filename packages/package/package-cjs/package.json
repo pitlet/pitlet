@@ -1,0 +1,25 @@
+{
+  "name": "@pitlet/package-cjs",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/packageCjs.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -b",
+    "dev": "tsc -b -w",
+    "prepublishOnly": "npm run build && npm test",
+    "release": "npm publish --access public"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "^4.14.150",
+    "jest": "^26.0.1",
+    "ts-jest": "^25.5.0",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "ws": "^7.2.5"
+  }
+}

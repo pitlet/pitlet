@@ -127,6 +127,40 @@ export const transformVue = async (asset) => {
       })
     }
   }
+  let customBlocksCode = ``
+  if (descriptor.customBlocks.length) {
+    customBlocksCode += `\n/* custom blocks */\n`
+  }
+  for (let i = 0; i < descriptor.customBlocks.length; i++) {
+    const block = descriptor.customBlocks[i]
+    const blockLang = block.lang || block.type
+    const queryString = `?type=style&index=${i}&lang=${blockLang}`
+    const customBlockRequest = `./${fileName}${queryString}`
+    customBlocksCode += `\nimport block${i} from '${customBlockRequest}'
+  if(typeof block${i} === 'function'){
+    block${i}(script)
+  }`
+    const blockType = `vue-${blockLang}`
+    if (block.src) {
+      directDependencies.push({
+        protocol: 'filesystem',
+        meta: {
+          type: blockType,
+          importee: block.src,
+        },
+      })
+    } else {
+      directDependencies.push({
+        protocol: 'virtual',
+        meta: {
+          type: blockType,
+          content: block.content,
+          importee: customBlockRequest,
+          id: `${asset.meta.id}${queryString}`,
+        },
+      })
+    }
+  }
   let code = [
     templateImport,
     scriptImport,

@@ -257,3 +257,72 @@ export default script`,
     },
   })
 })
+
+test('with custom block', async () => {
+  const asset = {
+    protocol: 'virtual',
+    meta: {
+      content: `<template>
+  <h1>hello world</h1>
+</template>
+
+<docs>
+Hello world
+</docs>
+`,
+    },
+  }
+  const transformed = await transformVue(asset)
+  expect(transformed).toEqual({
+    meta: {
+      content: `import { render } from './index.vue?type=template&lang=html'
+const script = {}
+
+script.render = render
+
+/* hot reload */
+if(module.hot){
+  script.__hmrId = 'undefined'
+  const api = __VUE_HMR_RUNTIME__
+  if(!api.createRecord('undefined', script)){
+    // console.log('vue api reload')
+    api.reload('undefined', script)
+  }
+
+  module.hot.accept('./index.vue?type=template&lang=html', () => {
+    const {render} = require('./index.vue?type=template&lang=html')
+    api.rerender('undefined', render)
+  })
+
+}
+
+export default script`,
+      directDependencies: [
+        {
+          protocol: 'virtual',
+          meta: {
+            content: `
+  <h1>hello world</h1>
+`,
+            type: 'vue-html',
+            id: 'undefined?type=template&lang=html',
+            importee: './index.vue?type=template&lang=html',
+          },
+        },
+        {
+          protocol: 'virtual',
+          meta: {
+            content: `
+Hello world
+`,
+            id: 'undefined?type=style&index=0&lang=docs',
+            importee: './index.vue?type=style&index=0&lang=docs',
+            type: 'vue-docs',
+          },
+        },
+      ],
+      type: 'js',
+    },
+    protocol: 'virtual',
+  })
+})
