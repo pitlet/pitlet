@@ -1,6 +1,10 @@
 import _ from 'lodash'
 
-const JS_CODE = `const WebSocket = require('ws')
+export const packageCjs = ({
+  requiresWebsocket = false,
+  webSocketPort = 3000,
+}) => async (assets, workspaceFolder, entryId) => {
+  const JS_CODE = `${requiresWebsocket ? `const WebSocket = require('ws')` : ''}
 const moduleCache = Object.create(null)
 const hmrCache = Object.create(null)
 
@@ -137,8 +141,6 @@ const process = {
 
 pitletRequire(entry)
 `
-
-export const packageCjs = async (assets, workspaceFolder, entryId) => {
   let jsModulesCode = `const modules = {\n`
   let lineOffset = 1
   const sourceRoot = workspaceFolder

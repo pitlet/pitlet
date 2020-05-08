@@ -129,7 +129,7 @@ window.pitlet.getLatestTimes = () => {
   return times.slice(-10).map(x=> x + 'ms').join(', ')
 }
 
-const webSocket = new WebSocket(\`ws://\${location.host}\`)
+const webSocket = new WebSocket('ws://localhost:3000')
 webSocket.onmessage = ({data}) => {
   const actions = JSON.parse(data)
   for(const {type, payload} of actions){
