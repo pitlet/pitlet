@@ -4,7 +4,7 @@ const JS_CODE = `const WebSocket = require('ws')
 const moduleCache = Object.create(null)
 const hmrCache = Object.create(null)
 
-const require = id => {
+const pitletRequire = id => {
   if(!modules[id]){
     throw new Error(\`cannot find module "\${id}"\`)
   }
@@ -18,7 +18,7 @@ const require = id => {
     if(!resolved){
       throw new Error(\`Cannot resolve module "\${relativeImport}" inside module "\${id}"\`)
     }
-    return require(resolved)
+    return pitletRequire(resolved)
   }
   const exports = {}
   // this will prevent infinite 'require' loop
@@ -78,7 +78,7 @@ const hmrRun = id => {
   delete moduleCache[id]
   if('.' in accept){
     // run self-accepting module
-    require(id)
+    pitletRequire(id)
   } else {
     const parentIds = getParentIds(id)
     for(const parentId of parentIds){
@@ -132,7 +132,7 @@ const process = {
   }
 }
 
-require(entry)
+pitletRequire(entry)
 `
 
 export const packageCjs = async (assets, workspaceFolder, entryId) => {

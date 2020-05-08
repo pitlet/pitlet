@@ -1,6 +1,6 @@
 {
   "name": "@pitlet/package-cjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/packageCjs.js",
   "scripts": {
