@@ -162,8 +162,6 @@ webSocket.onmessage = ({data}) => {
           const start = performance.now()
           hmrRun(id)
           const end = performance.now()
-          window.pitlet.times.push(end-start)
-          // console.log('hmr took'+(end-start)+'ms')
         } else {
           window.location.reload()
         }
