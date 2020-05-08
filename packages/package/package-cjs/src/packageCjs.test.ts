@@ -149,7 +149,7 @@ const hmrRun = id => {
   }
 }
 
-const webSocket = new WebSocket('ws://localhost:4001')
+const webSocket = new WebSocket('ws://localhost:3000')
 webSocket.onmessage = ({data}) => {
   const actions = JSON.parse(data)
   for(const {type, payload} of actions){
