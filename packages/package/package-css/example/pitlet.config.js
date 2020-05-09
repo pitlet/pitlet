@@ -1,5 +1,5 @@
 const { packageCss } = require('../dist/packageCss')
-const { packageJs } = require('@pitlet/package-js')
+const { packageJs } = require('../../package-js/dist/packageJs')
 const { transformJsModule } = require('@pitlet/transform-js-module')
 
 module.exports = {

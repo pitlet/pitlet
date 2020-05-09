@@ -11,5 +11,5 @@
     "sourceMap": true,
     "esModuleInterop": true
   },
-  "include": ["src", "../package-css/src/packageCss.ts", "../package-css/src/packageCss.test.ts"]
+  "include": ["src"]
 }

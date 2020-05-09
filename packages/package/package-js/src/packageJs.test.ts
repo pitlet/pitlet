@@ -37,7 +37,7 @@ const result = _add.add(1,2)`,
       protocol: 'virtual',
       meta: {
         type: 'css',
-        id: '/index/index.css',
+        id: '/test/index.css',
         content: `h1 {font-size: 24px}`,
       },
     },
@@ -68,7 +68,7 @@ const result = _add.add(1,2)
 "/test/add.js": [(exports, require, module) => {
 exports.add = (a,b) => a + b
 },{}],
-\"/index/index.css\": [() => {},{}],
+\"/test/index.css\": [() => {},{}],
 
 }
 //# sourceMappingURL=./modules.js.map
