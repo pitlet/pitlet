@@ -66,47 +66,50 @@ export const collectAssets: ({
     const transformed = await transform(virtualAsset)
     assertDefined(transformed)
     assertDefined(transformed.meta)
-    assertDefined(transformed.meta.directDependencies)
-    const resolvedDirectDependencies = await Promise.all(
-      transformed.meta.directDependencies.map(async directDependency => {
-        switch (directDependency.protocol) {
-          case 'filesystem':
-            const { importee, ...otherMeta } = directDependency.meta
-            const resolved = await bundler.resolve(importee, asset.meta.id)
-            return {
-              protocol: 'filesystem',
-              meta: {
-                id: resolved,
-                ...otherMeta,
-              },
-            }
-          case 'virtual':
-            return directDependency
-          default:
-            throw new Error(
-              `invalid protocol ${JSON.stringify(directDependency)}`,
-            )
+    if (transformed.meta.directDependencies) {
+      const resolvedDirectDependencies = await Promise.all(
+        transformed.meta.directDependencies.map(async (directDependency) => {
+          switch (directDependency.protocol) {
+            case 'filesystem':
+              const { importee, ...otherMeta } = directDependency.meta
+              const resolved = await bundler.resolve(importee, asset.meta.id)
+              return {
+                protocol: 'filesystem',
+                meta: {
+                  id: resolved,
+                  ...otherMeta,
+                },
+              }
+            case 'virtual':
+              return directDependency
+            default:
+              throw new Error(
+                `invalid protocol ${JSON.stringify(directDependency)}`
+              )
+          }
+        })
+      )
+      for (const resolvedDirectDependency of resolvedDirectDependencies) {
+        assertDefined(resolvedDirectDependency)
+        assertDefined(resolvedDirectDependency.meta)
+        assertDefined(resolvedDirectDependency.meta.id)
+        if (!seen.has(resolvedDirectDependency.meta.id)) {
+          seen.add(resolvedDirectDependency.meta.id)
+          await collect(resolvedDirectDependency)
         }
-      }),
-    )
-    for (const resolvedDirectDependency of resolvedDirectDependencies) {
-      assertDefined(resolvedDirectDependency)
-      assertDefined(resolvedDirectDependency.meta)
-      assertDefined(resolvedDirectDependency.meta.id)
-      if (!seen.has(resolvedDirectDependency.meta.id)) {
-        seen.add(resolvedDirectDependency.meta.id)
-        await collect(resolvedDirectDependency)
       }
+      // TODO those lines are probably the most inefficient, decreasing performance by 20%
+      const finalAsset = {
+        ...transformed,
+        meta: {
+          ...transformed.meta,
+          resolvedDirectDependencies,
+        },
+      }
+      finalAssets.push(finalAsset)
+    } else {
+      finalAssets.push(transformed)
     }
-    // TODO those lines are probably the most inefficient, decreasing performance by 20%
-    const finalAsset = {
-      ...transformed,
-      meta: {
-        ...transformed.meta,
-        resolvedDirectDependencies,
-      },
-    }
-    finalAssets.push(finalAsset)
   }
   await collect(entry)
   return finalAssets
