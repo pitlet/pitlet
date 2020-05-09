@@ -199,6 +199,8 @@ export const packageJs = async (
   }
   for (const jsAsset of assets) {
     if (jsAsset.meta.type !== 'js-module') {
+      jsModulesCode += `"${jsAsset.meta.id}": [() => {},{}],\n`
+      lineOffset += 1
       continue
     }
     lineOffset += 1 // because of module start
