@@ -10,7 +10,7 @@ const assertTrue = (value: any) => {
   }
 }
 
-const getType = asset => {
+const getType = (asset) => {
   if (asset.meta.type) {
     return asset.meta.type
   }
@@ -24,17 +24,26 @@ const getType = asset => {
     if (asset.meta.id.endsWith('.ts')) {
       return 'ts'
     }
+    if (asset.meta.id.endsWith('.css')) {
+      return 'css'
+    }
+    if (asset.meta.id.endsWith('.scss')) {
+      return 'scss'
+    }
+    if (asset.meta.id.endsWith('.sass')) {
+      return 'sass'
+    }
   }
   throw new Error(`unknown type ${JSON.stringify(asset)}`)
 }
 
-export const createTransform = ({ transformFunctionMap }) => async asset => {
+export const createTransform = ({ transformFunctionMap }) => async (asset) => {
   const type = getType(asset)
   if (!(type in transformFunctionMap)) {
     console.log(type)
     console.log(transformFunctionMap)
     throw new Error(
-      `no transform function for "${type}" files. You might need to install a plugin for "${type}" files`,
+      `no transform function for "${type}" files. You might need to install a plugin for "${type}" files`
     )
   }
   const fns = transformFunctionMap[type]

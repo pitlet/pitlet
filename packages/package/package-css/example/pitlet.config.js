@@ -1,9 +1,12 @@
 const { packageCss } = require('../dist/packageCss')
+const { packageJs } = require('@pitlet/package-js')
+const { transformJsModule } = require('@pitlet/transform-js-module')
 
 module.exports = {
-  entryPath: 'src/index.css',
+  entryPath: `${__dirname}/src/index.js`,
   transformFunctionMap: {
+    js: [transformJsModule],
     css: [],
   },
-  packageFunctions: [packageCss],
+  packageFunctions: [packageJs, packageCss],
 }
